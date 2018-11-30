@@ -1,0 +1,21 @@
+set bot avater to mecha icon with 'L' in a similar style to the L13 discord server's icon
+
+add following as change_prefix alternatives
+- chpre
+- change_prefix
+- change_command_prefix
+- premod
+- prefix_modify
+- modify_prefix
+
+allow commands to be executed via mention
+- a mention with no command simply shows the prefix
+- a mention with an invalid command is silently ignored
+
+add pingallin <role> to individually ping all members in <role>
+
+add ability to see members common with roles (e.g. who is in both role1 and role2, etc.)
+
+add ability to mass-add users in an existing role to a new (additional) role
+
+consider moving all functions to a class to avoid having to keep track of parameters
