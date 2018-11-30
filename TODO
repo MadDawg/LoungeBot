@@ -18,4 +18,3 @@ add ability to see members common with roles (e.g. who is in both role1 and role
 
 add ability to mass-add users in an existing role to a new (additional) role
 
-consider moving all functions to a class to avoid having to keep track of parameters
