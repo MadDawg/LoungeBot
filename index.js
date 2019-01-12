@@ -3,15 +3,20 @@
 // Third-party stuff
 const Discord = require('discord.js');
 const client = new Discord.Client();
+//const Cron = require('node-cron');
+
 
 // Our stuff
 const {token, command_prefix} = require('./config.json');
-const LoungeBot = require('./lougebot.js');
+const LoungeBot = require('./loungebot.js');
 const bot = new LoungeBot();
 
 client.on('ready', () => {
     console.log('Ready!');
 });
+
+
+const aliases_chpre = ["chpre", "change_prefix", "premod"];
 
 client.on('message', message => {
     // check guild id and assign prefix appropriately

@@ -2,73 +2,135 @@
 
 #import requests
 from lxml import html
-#import re
+from lxml import etree
+import re
 import argparse
 from collections import deque
 
 class Result:
-    #def __init__(self, title, similarity, imgurl, content):
-    #def __str___(self):
+    
+    # may be useful
+    #result_count = 0
+
+    #def __init__(self, title="", similarity="", imgurl="", content=""):
+    #    self.title = title
+    #    self.similarity = similarity
+    #    self.imgurl = imgurl
+    #    self.content = content
+    
+    def __init__(self):
+        self.creator = ""
+        self.profile = ""
+        self.title = ""
+        self.imgurl = ""
+        self.similarity = ""
+        #self.content = ""
 
 
-def parse_html(data):
-    # base expression needed for all other expressions
-    # represents the "result" div that contains all the information
-    # to be extracted
-    result_expr = '//div[@class="result"]'
-    
-    # base expression for the parent table
-    result_table_expr = result_expr+'/table[@class="resulttable"]/tbody/tr'
-    
-    # 
-    result_table_image_expr = result_table_expr+'/td[@class="resulttableimage"]'
-    result_table_content_expr = result_table_expr+'/td[@class="resulttablecontent"]'
-    result_content_expr = result_table_content_expr+'/div[@class="resultcontent"]'
-    
-    # expression used to extract similarity data
-    similarity_expr = result_table_content_expr+'/div[@class="resultmatchinfo"]/div[@class="resultsimilarityinfo"]/text()'
-    
-    # expressions used to extract the title and the creator (if given)
-    result_title_base_expr = result_content_expr+'/div[@class="resulttitle"]'
-    result_title_expr = result_title_base_expr+'/strong/text()'
-    result_title_text_expr = result_title_base_expr+'/text()'
+    def __repr__(self):
+        return self.__str__()
 
-    # expressions used to get the extra information
-    result_content_column_expr = result_content_expr+'/div[@class="resultcontentcolumn"]'
-    result_content_column_item_expr = result_content_column_expr+'/strong/text()'
-    result_content_column_text_expr = result_content_column_expr+'/text()'
-    result_content_column_link_expr = result_content_column_expr+'/a/@href'
-    result_content_column_link_text_expr = result_content_column_expr+'/a/text()'
-
-    tree = html.fromstring(data)
-    results = tree.xpath(result_expr)
-   
-    # TODO: since, for whatever reason, only one result matters,
-    # we can remove this loop
-    for result in results:
+    # return JSON string
+    def __str__(self):
         try:
-            #print(result)
-            #break
-            results_ = []
-            #print(result_title_expr)
-            titles = result.xpath(result_title_expr)
-            title_texts = result.xpath(result_title_text_expr)
-            title_texts_q = deque(title_texts)
+            #return '%s %s' % (self.creator, self.similarity)
+            return '{\"creator\":\"%s\",\"profile\":\"%s\",\"title\":\"%s\",\"imgurl\":\"%s\",\"similarity\":\"%s\"}' % (self.creator, self.profile, self.title, self.imgurl, self.similarity)
+        except:
+            return ''
+
+
+    # image creator 
+    def set_creator(self, creator): self.creator = creator
+
+    # creator's profile (Pixiv, Seiga, etc.; just the url)
+    def set_profile(self, profile): self.profile = profile
+
+    # title of work
+    def set_title(self, title): self.title = title
+
+    # image url (pixiv page, raw url in case of boorus, etc.)
+    def set_imgurl(self, imgurl): self.imgurl = imgurl
+
+    # search similarity
+    def set_similarity(self, similarity): self.similarity = similarity
+
+    # extra information
+    def set_content(self, content): self.content = content
+    
+    #def set_similarity(similarity): self.similarity = similarity
+    
+    def noop(self, arg=0): return
+
+# add HTML5 boilerplate
+def boil(raw_data):
+    if "<!doctype" in raw_data or "<!DOCTYPE" in raw_data:
+        return raw_data
+
+    opening = "<!doctype html><html><head><title>Sauce Found?</title></head><body>"
+    closing = "</body></html>"
+    data = opening + raw_data + closing
+    return data
+
+def parse_html(data, low_similarity=True):
+    tree = html.fromstring(data)
+    #results = tree.xpath(result_expr)
+    body = tree.find("body")
+    if body is None:
+        body = tree
+    
+    #TODO: oh boy, this is gonna require some explaining...
+    results = []
+    for i in range(0,len(body)):
+        try:
+            result = Result()
+            resulttablecontent = body[i][0][0][0][1]
+            resultmatchinfo = resulttablecontent[0]
+            resultsimilarityinfo = resultmatchinfo[0]
+            similarity = resultsimilarityinfo.text
+
+            resultcontent = resulttablecontent[1]
+            resulttitle = resultcontent[0]
+            titlestrong = resulttitle[0].text
             
-            for title in titles:
-                if title == "Creator: ":
-                    title_pair = [title, title_texts_q.pop()]
-                    results_.append(title_pair)
-                else:
-                    results_.append(title)
+            if titlestrong == "Creator: ":
+                creator = re.findall(r"</strong>(.+?)<br/>",etree.tostring(resulttitle, encoding='unicode'))[0]
+                result.set_creator(creator)
+            else:
+                result.set_title(titlestrong)
 
-            print(results_)
-            break
+            #resulttablecolumn = resultcontent[1]
+            # gotta watch those hardcoded array accessors
+            for i in range(1, len(resultcontent)):
+                try:
+                    if "ID:" in resultcontent[i][0].text:
+                        if resultcontent[i][1].tag == "a":
+                            result.set_imgurl(re.findall(r'href="(.+?)"',etree.tostring(resultcontent[i][1], encoding='unicode'))[0])
+                        for j in range(0,len(resultcontent[i])):
+                            try:
+                                if "Author:" in resultcontent[i][j].text or "Member:" in resultcontent[i][j].text:
+                                    if resultcontent[i][j+1].tag == "a":
+                                        result.set_profile(re.findall(r'href="(.+?)"',etree.tostring(resultcontent[i][j+1], encoding='unicode'))[0])
+                                        result.set_creator(re.findall(r'"linkify">(.+?)</a>',etree.tostring(resultcontent[i][j+1], encoding='unicode'))[0])
+                                        break # we're done here
+                            except: pass
+                except TypeError:
+                    pass
+
+            result.set_similarity(similarity)
+            results.append(result)
+            #print(result)
         except IndexError:
-            pass
+            if low_similarity: pass
+            else: break
+    
+    return results
 
-with open('./results.html',"r") as f:
-    data = f.read()
-parse_html(data)
+
+
+with open('./results3.html',"r") as f:
+    raw_data = f.read()
+
+data = boil(raw_data)
+print(parse_html(data, True))
 
 #print()

@@ -1,6 +1,8 @@
 set bot avater to mecha icon with 'L' in a similar style to the L13 discord server's icon
 
-add following as change_prefix alternatives
+categorize commands (admin, etc...)
+
+add following as change_prefix alternatives (maybe store all items in array)
 - chpre
 - change_prefix
 - change_command_prefix
@@ -17,4 +19,12 @@ add pingallin <role> to individually ping all members in <role>
 add ability to see members common with roles (e.g. who is in both role1 and role2, etc.)
 
 add ability to mass-add users in an existing role to a new (additional) role
+
+add chat logging (to catch badmins trying to delete messages)
+
+add mutually exclusive roles
+
+Saucebot (not actually gonna be its own bot... probably)
+- echo image name to user in case the source or other useful information is in the image name itself
+
 
