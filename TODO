@@ -10,6 +10,8 @@ add following as change_prefix alternatives (maybe store all items in array)
 - prefix_modify
 - modify_prefix
 
+- add reset prefix command
+
 allow commands to be executed via mention
 - a mention with no command simply shows the prefix
 - a mention with an invalid command is silently ignored

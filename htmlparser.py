@@ -125,12 +125,25 @@ def parse_html(data, low_similarity=True):
     
     return results
 
+def main():
+    parser = argparse.ArgumentParser(description='convert SauceNao results into JSON strings')
+    parser.add_argument('html', help='HTML string to be parsed', action='store')
+    parser.add_argument('-a', '--all', '--all-results',
+            help='include low similarity results',
+            action='store_true')
+
+    args = parser.parse_args()
+
+    data = boil(args.html)
+    json = parse_html(data, args.all)
+    print(json)
 
 
-with open('./results3.html',"r") as f:
-    raw_data = f.read()
+#with open('./results3.html',"r") as f:
+#    raw_data = f.read()
 
-data = boil(raw_data)
-print(parse_html(data, True))
 
-#print()
+#data = boil(raw_data)
+#print(parse_html(data, True))
+
+main()
