@@ -16,7 +16,7 @@ client.on('ready', () => {
 });
 
 
-const aliases_chpre = ["chpre", "change_prefix", "premod"];
+const aliases_chpre = ["chpre", "changeprefix"];
 
 client.on('message', message => {
     // check guild id and assign prefix appropriately

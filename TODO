@@ -4,11 +4,7 @@ categorize commands (admin, etc...)
 
 add following as change_prefix alternatives (maybe store all items in array)
 - chpre
-- change_prefix
-- change_command_prefix
-- premod
-- prefix_modify
-- modify_prefix
+- changeprefix
 
 - add reset prefix command
 
