@@ -20,9 +20,8 @@ const aliases_echo = ["echo", "print"];
 const admin_commands = [] + aliases_chpre;
 //const debug_commands = [] + aliases_echo;
 
-//const json='[{"creator":"zero (ray 0805)","profile":"","title":"","imgurl":"https://danbooru.donmai.us/post/show/3202170","thumbnail":"http://img3.saucenao.com/booru/f/b/fbfabf1b15fac67a1fd7d3f66003921f_1.jpg","similarity":"94.89%"}]';
-
 function create_embeds(json){
+    //console.log(json);
     // create RichEmbed object here
     // fields are dependent on information give in the JSON string
     const items = JSON.parse(json);
@@ -43,13 +42,13 @@ function create_embeds(json){
 
 
         if (items[i].title != "")
-            embed.addField("title", items[i].title);
+            embed.addField("Title", items[i].title);
         if (items[i].creator != "")
-            embed.addField("creator", items[i].creator);
+            embed.addField("Creator", items[i].creator);
         
         embed.setURL(items[i].imgurl);
         embed.setThumbnail(items[i].thumbnail);
-        embed.addField("similarity", items[i].similarity);
+        embed.addField("Similarity", items[i].similarity);
         embed.setFooter("Sauce provided by SauceNao");
 
         embeds.push(embed);
@@ -100,10 +99,8 @@ client.on('message', message => {
 
                 pyprocess.stdout.on('data', (data) => {
                     const json = data.toString();
-                    //console.log(json);
-                    //message.channel.send(json);
+                    
                     // construct and send embeds here!
-                    create_embeds(json);
                     message.channel.send(`**Check the SauceNao page directly at** http://saucenao.com/search.php?db=999&url=${args[0]}`)
                     const embeds = create_embeds(json);
                     if (!embeds){
