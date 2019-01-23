@@ -24,6 +24,8 @@ class Result:
         self.title = ""
         self.imgurl = ""
         self.similarity = ""
+        self.thumbnail = ""
+        #self.booru = ""
         #self.content = ""
 
 
@@ -34,7 +36,8 @@ class Result:
     def __str__(self):
         try:
             #return '%s %s' % (self.creator, self.similarity)
-            return '{\"creator\":\"%s\",\"profile\":\"%s\",\"title\":\"%s\",\"imgurl\":\"%s\",\"similarity\":\"%s\"}' % (self.creator, self.profile, self.title, self.imgurl, self.similarity)
+            #return '{\"creator\":\"%s\",\"profile\":\"%s\",\"title\":\"%s\",\"imgurl\":\"%s\",\"similarity\":\"%s\",\"booru\":\"%s\"}' % (self.creator, self.profile, self.title, self.imgurl, self.similarity, self.booru)
+            return '{\"creator\":\"%s\",\"profile\":\"%s\",\"title\":\"%s\",\"imgurl\":\"%s\",\"thumbnail\":\"%s\",\"similarity\":\"%s\"}' % (self.creator, self.profile, self.title, self.imgurl, self.thumbnail, self.similarity)
         except:
             return ''
 
@@ -57,7 +60,9 @@ class Result:
     # extra information
     def set_content(self, content): self.content = content
     
-    #def set_similarity(similarity): self.similarity = similarity
+    def set_thumbnail(self, thumbnail): self.thumbnail = thumbnail
+
+    #def set_booru(self, booru): self.booru = booru
     
     def noop(self, arg=0): return
 
@@ -71,7 +76,7 @@ def boil(raw_data):
     data = opening + raw_data + closing
     return data
 
-def parse_html(data, low_similarity=True):
+def parse_html(data, low_similarity=False):
     tree = html.fromstring(data)
     #results = tree.xpath(result_expr)
     body = tree.find("body")
@@ -83,11 +88,28 @@ def parse_html(data, low_similarity=True):
     for i in range(0,len(body)):
         try:
             result = Result()
+            resulttableimage = body[i][0][0][0][0]
             resulttablecontent = body[i][0][0][0][1]
             resultmatchinfo = resulttablecontent[0]
             resultsimilarityinfo = resultmatchinfo[0]
             similarity = resultsimilarityinfo.text
 
+            resultmiscinfo = resultmatchinfo[1]
+        
+            resultimage = resulttableimage[0]
+            try:
+                if resultimage[0][0].tag == "img":
+                    result.set_thumbnail(re.findall(r'src="(.+?)"',etree.tostring(resultimage[0], encoding='unicode'))[0])
+            except: raise
+
+            try:
+                # eh, just grab the first one
+                if resultmiscinfo[0].tag == "a":
+                    #result.set_booru(re.findall(r'href="(.+?)"',etree.tostring(resultmiscinfo[0], encoding='unicode'))[0])
+                    result.set_imgurl(re.findall(r'href="(.+?)"',etree.tostring(resultmiscinfo[0], encoding='unicode'))[0])
+            except:
+                pass
+            
             resultcontent = resulttablecontent[1]
             resulttitle = resultcontent[0]
             titlestrong = resulttitle[0].text

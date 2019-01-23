@@ -1,7 +1,7 @@
 "use strict";
 
 // Third-party stuff
-const { Discord, RichEmbed } = require('discord.js');
+const Discord = require('discord.js');
 const client = new Discord.Client();
 //const Cron = require('node-cron');
 const Browser = require('zombie');
@@ -19,8 +19,8 @@ const aliases_echo = ["echo", "print"];
 
 const admin_commands = [] + aliases_chpre;
 //const debug_commands = [] + aliases_echo;
-json = '[{"creator":"zero (ray 0805)","profile":"","title":"","imgurl":"","similarity":"94.89%"}, {"creator":"Utolee Mangart","profile":"http://www.pixiv.net/member.php?id=12135431","title":"漫画 Manga 765P 766P","imgurl":"http://www.pixiv.net/member_illust.php?mode=medium&amp;illust_id=54110600","similarity":"36.10%"}, {"creator":"いがぐり","profile":"http://www.pixiv.net/member.php?id=6254654","title":"狂喜乱舞","imgurl":"http://www.pixiv.net/member_illust.php?mode=medium&amp;illust_id=64635357","similarity":"37.39%"}, {"creator":"","profile":"","title":"Tokiryoujoku vol. 13","imgurl":"","similarity":"35.60%"}, {"creator":"やまい","profile":"http://www.pixiv.net/member.php?id=2017222","title":"お仕事の宣伝です。","imgurl":"http://www.pixiv.net/member_illust.php?mode=medium&amp;illust_id=57482205","similarity":"35.12%"}, {"creator":"","profile":"","title":"Angel","imgurl":"","similarity":"35.11%"}]';
 
+//const json='[{"creator":"zero (ray 0805)","profile":"","title":"","imgurl":"https://danbooru.donmai.us/post/show/3202170","thumbnail":"http://img3.saucenao.com/booru/f/b/fbfabf1b15fac67a1fd7d3f66003921f_1.jpg","similarity":"94.89%"}]';
 
 function create_embeds(json){
     // create RichEmbed object here
@@ -28,7 +28,7 @@ function create_embeds(json){
     const items = JSON.parse(json);
     const embeds = [];
     for (var i = 0; i < items.length; i++){
-        const embed = new RichEmbed();
+        const embed = new Discord.RichEmbed();
         embed.setTitle('Result');
         
         const len = items[i].similarity.length;
@@ -41,9 +41,20 @@ function create_embeds(json){
         else
             embed.setColor('#FF0000');
 
-        embeds.append(embed);
-    }
 
+        if (items[i].title != "")
+            embed.addField("title", items[i].title);
+        if (items[i].creator != "")
+            embed.addField("creator", items[i].creator);
+        
+        embed.setURL(items[i].imgurl);
+        embed.setThumbnail(items[i].thumbnail);
+        embed.addField("similarity", items[i].similarity);
+        embed.setFooter("Sauce provided by SauceNao");
+
+        embeds.push(embed);
+    }
+    return embeds;
 }
 
 client.on('ready', () => {
@@ -75,8 +86,6 @@ client.on('message', message => {
         message.channel.send(args.join(" "));
     }
     else if(aliases_sauce.includes(command)){
-        create_embeds(json);
-        return;
         function go(){
             browser.fill('url', args[0]);
 	        //browser.fill('url',this._imgurl);
@@ -87,7 +96,7 @@ client.on('message', message => {
 		        const html = browser.html('div.result');
 
                 // parse html
-                const pyprocess = spawn('python3', ["htmlparser.py", "-a", html]);
+                const pyprocess = spawn('python3', ["htmlparser.py", html]);
 
                 pyprocess.stdout.on('data', (data) => {
                     const json = data.toString();
@@ -95,6 +104,15 @@ client.on('message', message => {
                     //message.channel.send(json);
                     // construct and send embeds here!
                     create_embeds(json);
+                    message.channel.send(`**Check the SauceNao page directly at** http://saucenao.com/search.php?db=999&url=${args[0]}`)
+                    const embeds = create_embeds(json);
+                    if (!embeds){
+                        message.channel.send(`Nothing to see here (reminder: low similarity results are not shown)`);
+                        return;
+                    }
+                    for (let i = 0; i < embeds.length; i++){
+                        message.channel.send(embeds[i]);
+                    }
                 });
             }   
             browser.pressButton('get sauce', pressBtn.bind(this));
