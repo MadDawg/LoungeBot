@@ -1,12 +1,4 @@
-set bot avater to mecha icon with 'L' in a similar style to the L13 discord server's icon
-
-categorize commands (admin, etc...)
-
-add following as change_prefix alternatives (maybe store all items in array)
-- chpre
-- changeprefix
-
-- add reset prefix command
+add reset prefix command
 
 allow commands to be executed via mention
 - a mention with no command simply shows the prefix
@@ -22,7 +14,5 @@ add chat logging (to catch badmins trying to delete messages)
 
 add mutually exclusive roles
 
-Saucebot (not actually gonna be its own bot... probably)
-- echo image name to user in case the source or other useful information is in the image name itself
-
+add scheduling/reminder support (cron)
 

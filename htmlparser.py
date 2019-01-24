@@ -99,7 +99,8 @@ def parse_html(data, low_similarity=False):
             resultimage = resulttableimage[0]
             try:
                 if resultimage[0][0].tag == "img":
-                    result.set_thumbnail(re.findall(r'src="(.+?)"',etree.tostring(resultimage[0], encoding='unicode'))[0])
+                    url = re.findall(r'src="(.+?)"',etree.tostring(resultimage[0], encoding='unicode'))[0]
+                    result.set_thumbnail(url)
             except: raise
 
             try:
