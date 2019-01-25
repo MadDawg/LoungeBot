@@ -16,3 +16,4 @@ add mutually exclusive roles
 
 add scheduling/reminder support (cron)
 
+detect when sauce command is executed in a NSFW channel (set hide=1 when not in NSFW channel), may require rewrite of sauce code
