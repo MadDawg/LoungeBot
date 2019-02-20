@@ -13,11 +13,12 @@ const {token, command_prefix} = require('./config.json');
 const LoungeBot = require('./loungebot.js');
 const bot = new LoungeBot();
 
-const aliases_chpre = ["chpre", "changeprefix"];
-const aliases_sauce = ["sauce"];
-const aliases_echo = ["echo", "print"];
+const aliases_chpre = ["chpre", "changeprefix"]; //aliases for chpre command
+const aliases_sauce = ["sauce", "source"]; //aliases for sauce command
+const aliases_echo = ["echo", "print"]; //aliases for echo command
+const nsfw = []; //nsfw commands (not including admin commands)
 
-const admin_commands = [] + aliases_chpre;
+const admin_commands = ["setnsfw"] + aliases_chpre;
 //const debug_commands = [] + aliases_echo;
 
 function create_embeds(json){
@@ -57,7 +58,7 @@ function create_embeds(json){
 }
 
 client.on('ready', () => {
-    console.log('Ready!');
+    console.log('LoungeBot: enabling your laziness\nReady!');
 });
 
 client.on('message', message => { 
@@ -84,6 +85,7 @@ client.on('message', message => {
     if(aliases_echo.includes(command)){
         message.channel.send(args.join(" "));
     }
+    //TODO: remove form filling stuff and just use the direct link
     else if(aliases_sauce.includes(command)){
         function go(){
             browser.fill('url', args[0]);
@@ -101,9 +103,10 @@ client.on('message', message => {
                     const json = data.toString();
                     
                     // construct and send embeds here!
+                    // TODO: embed this link too
                     message.channel.send(`**Check the SauceNao page directly at** http://saucenao.com/search.php?db=999&url=${args[0]}`)
                     const embeds = create_embeds(json);
-                    if (!embeds){
+                    if (embeds == []){
                         message.channel.send(`Nothing to see here (reminder: low similarity results are not shown)`);
                         return;
                     }
