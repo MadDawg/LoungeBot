@@ -27,32 +27,6 @@ class LoungeBot{
     InitDB(guildid, prefix="lb!", nsfw=[], botspam=[]){
         this._serverdb.push({"guildid": guildid, "prefix": prefix, "nsfw": nsfw, "botspam": botspam});
     }
-    // TODO: remove this and replace with prefix, nsfw, etc. functions
-    UpdateDB(prefix, nsfw, botspam, guildid){
-        try{
-            // this should all work so long as find() succeeds
-            if (prefix){
-                this._serverdb.find(x => x.guildid === guildid).prefix = prefix;
-            }
-            if (this._serverdb.find(x => x.guildid === guildid).nsfw && nsfw){
-                this._serverdb.find(x => x.guildid === guildid).nsfw.push(nsfw);
-            }
-            else if(nsfw){
-                this._serverdb.find(x => x.guildid === guildid).nsfw = [nsfw];
-            }
-
-            if(this._serverdb.find(x => x.guildid === guildid).botspam && botspam){
-                this._serverdb.find(x => x.guildid === guildid).botspam.push(botspam);
-            }
-            else if(botspam){
-                this._serverdb.find(x => x.guildid === guildid).botspam = [botspam];
-            }
-        }
-        catch(err){
-            InitDB(guildid, prefix, [nsfw], [botspam]);
-        }
-        this.WriteOut();
-    }
 
     InitPrefix(prefix, guildid){ 
         try{ 
