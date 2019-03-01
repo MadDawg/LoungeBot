@@ -18,7 +18,7 @@ const aliases_sauce = ["sauce", "source"]; //aliases for sauce command
 const aliases_echo = ["echo", "print"]; //aliases for echo command
 const nsfw = []; //nsfw commands (not including admin commands)
 
-const admin_commands = ["setnsfw"] + aliases_chpre;
+const admin_commands = ["setnsfw", "setbotspam"] + aliases_chpre;
 //const debug_commands = [] + aliases_echo;
 
 function create_embeds(json){
@@ -92,9 +92,9 @@ client.on('message', message => {
 	        //browser.fill('url',this._imgurl);
 
             function pressBtn(){
-		        browser.assert.success();
-		        browser.assert.text('title', 'Sauce Found?');
-		        const html = browser.html('div.result');
+                browser.assert.success();
+                browser.assert.text('title', 'Sauce Found?');
+                const html = browser.html('div.result');
 
                 // parse html
                 const pyprocess = spawn('python3', ["htmlparser.py", html]);
