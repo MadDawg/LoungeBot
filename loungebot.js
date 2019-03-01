@@ -40,7 +40,9 @@ class LoungeBot{
     ChangePrefix(newprefix, oldprefix, guildid){
         // avoid writing to filesystem if prefix doesn't change
         if (newprefix !== oldprefix){
-            this.UpdateDb(newprefix, guildid);
+            if (!this._serverdb.find(x => x.guildid === guildid)){ InitDB(guildid); }
+            this._serverdb.find(x => x.guildid === guildid).prefix = newprefix;
+            this.WriteOut();
         }
         return newprefix;
     }
