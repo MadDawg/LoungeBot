@@ -18,11 +18,11 @@ const aliases_chpre = ["chpre", "changeprefix"]; //aliases for chpre command
 const aliases_sauce = ["sauce", "source"]; //aliases for sauce command
 const aliases_echo = ["echo", "print"]; //aliases for echo command
 const nsfw = []; //nsfw commands (not including admin commands)
+const spammy = [] + aliases_sauce; //spammy commands
 
 const owner_commands = []; //bot owner exclusive commands
-const admin_commands = ["setbotspam", "removebotspam"] + aliases_chpre
+const admin_commands = ["setbotspam", "removebotspam"] + aliases_chpre;
 //const debug_commands = [] + aliases_echo;
-const admin_commands = [];
 
 function create_embeds(json){
     //console.log(json);
@@ -91,51 +91,48 @@ client.on('message', message => {
         return;
     }
 
+    //check if command is spammy
+    if (spammy.includes(command)){
+        if (!bot.isBotSpam(message.channel.id, message.guild.id)){
+            message.channel.send(`This command can only be executed in channels marked as bot-spam`);
+            return;
+        }
+    }
+
     if(aliases_echo.includes(command)){
         message.channel.send(args.join(" "));
     }
     //TODO: remove form filling stuff and just use the direct link
     else if(aliases_sauce.includes(command)){
-        if (bot.isBotSpam){
-            message.channel.send(`This command can only be executed in channels marked as bot-spam`);
-            return;
-        }
         if (args == []) return;
         // check if channel is NSFW and adjust SauceNao URL accordingly
         let hidelevel = "3";
         if (message.channel.nsfw){ hidelevel = "1"; }
         function go(){
-            browser.fill('url', args[0]);
-	        //browser.fill('url',this._imgurl);
+            browser.assert.success();
+            browser.assert.text('title', 'Sauce Found?');
+            const html = browser.html('div.result');
 
-            function pressBtn(){
-                browser.assert.success();
-                browser.assert.text('title', 'Sauce Found?');
-                const html = browser.html('div.result');
+            // parse html
+            const pyprocess = spawn('python3', ["htmlparser.py", html]);
 
-                // parse html
-                const pyprocess = spawn('python3', ["htmlparser.py", html]);
-
-                pyprocess.stdout.on('data', (data) => {
-                    const json = data.toString();
+            pyprocess.stdout.on('data', (data) => {
+                const json = data.toString();
                     
-                    // construct and send embeds here!
-                    // TODO: embed or otherwise format this link too
-                    message.channel.send(`**Check the SauceNao page directly at** http://saucenao.com/search.php?db=999&url=${args[0]}`)
-                    const embeds = create_embeds(json);
-                    if (embeds == []){
-                        message.channel.send(`Nothing to see here (reminder: low similarity results are not shown)`);
-                        return;
-                    }
-                    for (let i = 0; i < embeds.length; i++){
-                        message.channel.send(embeds[i]);
-                    }
-                });
-            }   
-            browser.pressButton('get sauce', pressBtn.bind(this));
+                // construct and send embeds here!
+                // TODO: embed or otherwise format this link too
+                message.channel.send(`**Check the SauceNao page directly at** http://saucenao.com/search.php?db=999i&hide=${hidelevel}&url=${args[0]}`)
+                const embeds = create_embeds(json);
+                if (embeds == []){
+                    message.channel.send(`Nothing to see here (reminder: low similarity results are not shown)`);
+                    return;
+                }
+                for (let i = 0; i < embeds.length; i++){
+                    message.channel.send(embeds[i]);
+                }
+            });   
         }
-        browser.visit('http://saucenao.com', go.bind(this));
-        //message.channel.send(`This has not been implemented yet.`);
+        browser.visit('http://saucenao.com/search.php?db=999&hide='+hidelevel+'&url='+args[0], go.bind(this));
     }
     else if(command == "setbotspam"){
         message.channel.send(bot.addBotSpam(message.channel.id, message.guild.id));
@@ -149,6 +146,7 @@ client.on('message', message => {
         if(botspam == []) return;
         let channels = message.guild.channels;
 
+        //TODO: remove bot-spam channel if it was deleted from the server
         for (var i = 0; i < botspam.length; i++){
             let channel = channels.get(botspam[i]);
             if (channel){

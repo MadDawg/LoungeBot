@@ -1,7 +1,5 @@
 "use strict";
 
-//TODO: fix the camelCase
-
 // serverdb is the array of objects representing guild IDs
 // and their configured command prefixes
 
@@ -26,8 +24,8 @@ class LoungeBot{
         catch(err){ console.error(err); }
         return;
     }
-    initDB(guildid, prefix="lb!", nsfw=[], botspam=[]){
-        this._serverdb.push({"guildid": guildid, "prefix": prefix, "nsfw": nsfw, "botspam": botspam});
+    initDB(guildid, prefix="lb!", botspam=[]){
+        this._serverdb.push({"guildid": guildid, "prefix": prefix, "botspam": botspam});
     }
 
     initPrefix(prefix, guildid){ 
@@ -42,7 +40,7 @@ class LoungeBot{
     changePrefix(newprefix, oldprefix, guildid){
         // avoid writing to filesystem if prefix doesn't change
         if (newprefix !== oldprefix){
-            if (!this._serverdb.find(x => x.guildid === guildid)){ initDB(guildid); }
+            if (!this._serverdb.find(x => x.guildid === guildid)){ this.initDB(guildid); }
             this._serverdb.find(x => x.guildid === guildid).prefix = newprefix;
             this.writeOut();
         }
@@ -51,7 +49,7 @@ class LoungeBot{
     
     // Add/remove/check/list bot-spam channels
     addBotSpam(channel, guildid){
-        if (!this._serverdb.find(x => x.guildid === guildid)){ initDB(guildid); }
+        if (!this._serverdb.find(x => x.guildid === guildid)){ this.initDB(guildid); }
         let botspam = this._serverdb.find(x => x.guildid === guildid).botspam;
 
         if (this.isBotSpam(channel, guildid)){ return "Channel is already marked as bot-spam."; }
@@ -62,7 +60,7 @@ class LoungeBot{
     }
     
     removeBotSpam(channel, guildid){
-        if (!this._serverdb.find(x => x.guildid === guildid)){ initDB(guildid); }
+        if (!this._serverdb.find(x => x.guildid === guildid)){ this.initDB(guildid); }
         
         let botspam = this._serverdb.find(x => x.guildid === guildid).botspam;
         let index = botspam.indexOf(channel);
@@ -76,7 +74,7 @@ class LoungeBot{
     }
 
     isBotSpam(channel, guildid){
-        if (!this._serverdb.find(x => x.guildid === guildid)){ initDB(guildid); }
+        if (!this._serverdb.find(x => x.guildid === guildid)){ this.initDB(guildid); }
         
         let botspam = this._serverdb.find(x => x.guildid === guildid).botspam;
         let index = botspam.indexOf(channel);
@@ -86,7 +84,7 @@ class LoungeBot{
 
     // Be careful to not modify the array on accident!
     getBotSpam(guildid){
-        if (!this._serverdb.find(x => x.guildid === guildid)){ initDB(guildid); }
+        if (!this._serverdb.find(x => x.guildid === guildid)){ this.initDB(guildid); }
         return (this._serverdb.find(x => x.guildid === guildid).botspam);
     }
 
