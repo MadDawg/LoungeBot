@@ -107,7 +107,7 @@ client.on('message', message => {
         if (args == []) return;
         // check if channel is NSFW and adjust SauceNao URL accordingly
         let hidelevel = "3";
-        if (message.channel.nsfw){ hidelevel = "1"; }
+        if (message.channel.nsfw){ hidelevel = "0"; }
         function go(){
             browser.assert.success();
             browser.assert.text('title', 'Sauce Found?');
