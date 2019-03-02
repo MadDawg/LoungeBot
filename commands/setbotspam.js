@@ -1,6 +1,6 @@
 module.exports = {
     name: 'setbotspam',
-    aliases: ['setbs', 'addbs'],
+    aliases: ['setbs', 'addbotspam', 'addbs'],
     description: 'Mark channel as bot-spam',
     guildOnly: true,
     args: false,
