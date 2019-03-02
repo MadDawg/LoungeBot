@@ -121,7 +121,7 @@ client.on('message', message => {
                     
                 // construct and send embeds here!
                 // TODO: embed or otherwise format this link too
-                message.channel.send(`**Check the SauceNao page directly at** http://saucenao.com/search.php?db=999i&hide=${hidelevel}&url=${args[0]}`)
+                message.channel.send(`**Check the SauceNao page directly at** http://saucenao.com/search.php?db=999&hide=${hidelevel}&url=${args[0]}`)
                 const embeds = create_embeds(json);
                 if (embeds == []){
                     message.channel.send(`Nothing to see here (reminder: low similarity results are not shown)`);

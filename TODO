@@ -23,3 +23,5 @@ detect when sauce command is executed outside of a bot spamming channel; will re
 write a manual
 
 add help command
+
+fix invalid URLs that may appear when performing sauce command
