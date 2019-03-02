@@ -18,4 +18,8 @@ add scheduling/reminder support (cron)
 
 detect when sauce command is executed in a NSFW channel (set hide=3 when not in NSFW channel); may require rewrite of sauce code
 
-detect when sauce command is executed outside of a bot spamming channel; will require redesign of serverdb.json 
+detect when sauce command is executed outside of a bot spamming channel; will require redesign of serverdb.json
+
+write a manual
+
+add help command

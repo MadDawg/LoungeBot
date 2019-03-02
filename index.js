@@ -9,6 +9,7 @@ const { spawn } = require('child_process');
 const browser = new Browser();
 
 // Our stuff
+// TODO: add owner field to config.json
 const {token, command_prefix} = require('./config.json');
 const LoungeBot = require('./loungebot.js');
 const bot = new LoungeBot();
@@ -18,8 +19,10 @@ const aliases_sauce = ["sauce", "source"]; //aliases for sauce command
 const aliases_echo = ["echo", "print"]; //aliases for echo command
 const nsfw = []; //nsfw commands (not including admin commands)
 
-const admin_commands = ["setnsfw", "setbotspam"] + aliases_chpre;
+const owner_commands = []; //bot owner exclusive commands
+const admin_commands = ["setbotspam", "removebotspam"] + aliases_chpre
 //const debug_commands = [] + aliases_echo;
+const admin_commands = [];
 
 function create_embeds(json){
     //console.log(json);
@@ -57,14 +60,20 @@ function create_embeds(json){
     return embeds;
 }
 
+// gracefully end on keyboard interrupt (NOTE: does not work on Windows!)
+process.on('SIGINT', function() {
+    console.log("Logging off!");
+    client.destroy();
+});
+
 client.on('ready', () => {
-    console.log('LoungeBot: enabling your laziness\nReady!');
+    console.log('LoungeBot: enabling your laziness since 2019!\nReady!');
 });
 
 client.on('message', message => { 
     // check guild id and assign prefix appropriately
     // if guild id is not found in database, use default prefix
-    const prefix = bot.InitPrefix(command_prefix, message.guild.id);
+    const prefix = bot.initPrefix(command_prefix, message.guild.id);
     
     // TODO: allow command execution on mention
     if (!message.content.startsWith(prefix) || message.author.bot) return;
@@ -87,6 +96,14 @@ client.on('message', message => {
     }
     //TODO: remove form filling stuff and just use the direct link
     else if(aliases_sauce.includes(command)){
+        if (bot.isBotSpam){
+            message.channel.send(`This command can only be executed in channels marked as bot-spam`);
+            return;
+        }
+        if (args == []) return;
+        // check if channel is NSFW and adjust SauceNao URL accordingly
+        let hidelevel = "3";
+        if (message.channel.nsfw){ hidelevel = "1"; }
         function go(){
             browser.fill('url', args[0]);
 	        //browser.fill('url',this._imgurl);
@@ -103,7 +120,7 @@ client.on('message', message => {
                     const json = data.toString();
                     
                     // construct and send embeds here!
-                    // TODO: embed this link too
+                    // TODO: embed or otherwise format this link too
                     message.channel.send(`**Check the SauceNao page directly at** http://saucenao.com/search.php?db=999&url=${args[0]}`)
                     const embeds = create_embeds(json);
                     if (embeds == []){
@@ -120,12 +137,31 @@ client.on('message', message => {
         browser.visit('http://saucenao.com', go.bind(this));
         //message.channel.send(`This has not been implemented yet.`);
     }
-    else if(command == "getid"){
-        message.channel.send(message.guild.id);
+    else if(command == "setbotspam"){
+        message.channel.send(bot.addBotSpam(message.channel.id, message.guild.id));
     }
+    else if(command == "removebotspam"){
+        message.channel.send(bot.removeBotSpam(message.channel.id, message.guild.id));
+    }
+    else if(command == "listbotspam"){
+        //TODO: format this as embed
+        let botspam = bot.getBotSpam(message.guild.id);
+        if(botspam == []) return;
+        let channels = message.guild.channels;
+
+        for (var i = 0; i < botspam.length; i++){
+            let channel = channels.get(botspam[i]);
+            if (channel){
+                let category = channels.get(channel.parentID);
+                message.channel.send(`Channel Name: ${channel.name}\n`+
+                    `Channel ID: ${channel.id}\n`+
+                    `Parent Category: ${category.name}`);
+            }
+        }
+    } 
     else if (aliases_chpre.includes(command)){
         let arg = message.content.substring(message.content.indexOf(" ") + 1, message.content.length);
-        message.channel.send(`Prefix **${prefix}** changed to **${bot.ChangePrefix(arg, prefix, message.guild.id)}**`);
+        message.channel.send(`Prefix **${prefix}** changed to **${bot.changePrefix(arg, prefix, message.guild.id)}**`);
     }
 });
 
