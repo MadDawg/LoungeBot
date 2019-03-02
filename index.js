@@ -102,7 +102,7 @@ client.on('message', message => {
     if(aliases_echo.includes(command)){
         message.channel.send(args.join(" "));
     }
-    //TODO: remove form filling stuff and just use the direct link
+    
     else if(aliases_sauce.includes(command)){
         if (args == []) return;
         // check if channel is NSFW and adjust SauceNao URL accordingly
