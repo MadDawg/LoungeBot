@@ -1,5 +1,7 @@
 "use strict";
 
+//TODO: this file may be deprecated at this point
+
 // serverdb is the array of objects representing guild IDs
 // and their configured command prefixes
 
@@ -33,7 +35,7 @@ class LoungeBot{
         this._serverdb.push({"guildid": guildid, "prefix": prefix, "botspam": botspam});
     }
 
-    initPrefix(prefix, guildid){ 
+    initPrefix(prefix, guildid){
         try{ 
             return this._serverdb.find(x => x.guildid === guildid).prefix;
         }

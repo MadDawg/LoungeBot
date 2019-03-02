@@ -25,3 +25,5 @@ write a manual
 add help command
 
 fix invalid URLs that may appear when performing sauce command
+
+figure out why help.js breaks
