@@ -7,7 +7,12 @@
 class LoungeBot{
     constructor(){
        this._fs = require('fs');
-       this._serverdb = require('./serverdb.json');
+       try{
+           this._serverdb = require('./serverdb.json');
+       }
+       catch(err){
+           this._serverdb = [];
+       }
     } 
     
     //------ DATABASE METHODS ------
