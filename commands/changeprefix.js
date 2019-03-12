@@ -8,7 +8,7 @@ module.exports = {
     spammy: false,
     admin: true,
 
-    execute(message, args){
+    execute(message, args, bot){
         message.channel.send(`Prefix **${prefix}** changed to **${bot.changePrefix(args[0], prefix, message.guild.id)}**`);
     },
 };
