@@ -33,3 +33,5 @@
 - figure out why help.js breaks
 
 - convert htmlparser.py to javascript to remove python dependency
+
+- remove commented-out code
