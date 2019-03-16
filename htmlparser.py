@@ -68,6 +68,7 @@ class Result:
 
 # add HTML5 boilerplate
 def boil(raw_data):
+    # lazy check to see if we have a full HTML document or just the result divs
     if "<!doctype" in raw_data or "<!DOCTYPE" in raw_data:
         return raw_data
 
@@ -83,11 +84,18 @@ def parse_html(data, low_similarity=False):
     if body is None:
         body = tree
     
-    #TODO: oh boy, this is gonna require some explaining...
+    # loop through every result div and grab the info want
     results = []
     for i in range(0,len(body)):
         try:
             result = Result()
+            # instead of using full xpath strings,
+            # we'll basically treat this as a list (see lxml docs)
+            # also, since all of these elements are in the same relative locations
+            # with respect to the body element, things are further simplified
+            # e.g. "html/body/div#mainarea/div#middle/div.result/table.resulttable/tbody/tr/td.resulttableimage"
+            # shortens to "html/body/div/div/div/table/tbody/tr/td" (rather, ".../tbody/tr[0]")
+            # which becomes what is seen below
             resulttableimage = body[i][0][0][0][0]
             resulttablecontent = body[i][0][0][0][1]
             resultmatchinfo = resulttablecontent[0]
@@ -161,12 +169,5 @@ def main():
     json = parse_html(data, args.all)
     print(json)
 
-
-#with open('./results3.html',"r") as f:
-#    raw_data = f.read()
-
-
-#data = boil(raw_data)
-#print(parse_html(data, True))
 
 main()
