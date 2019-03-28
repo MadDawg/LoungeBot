@@ -18,6 +18,7 @@ module.exports = {
             data.push('Here\'s a list of all commands:');
             data.push(commands.map(command => command.name).join(', '));
             data.push(`\nYou can send \`${command_prefix}help <command name>\` to get info on a specific command!`);
+            data.push(`\nVisit https://github.com/MadDawg/LoungeBot/blob/master/COMMANDS.md for additional information.`)
 
             return message.author.send(data, { split: true })
                 .then(() => {
