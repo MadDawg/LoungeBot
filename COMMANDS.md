@@ -59,7 +59,7 @@ Searches for given image on SauceNao. Only works in channels marked as bot-spam,
 **Example:** `lb!sauce https://i.imgur.com/nhgYU4J.png`
 
 ### date
-Display date/time. See [Wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for time zone values
+Display date/time. See [Wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for time zone values.
 
 **Usage:** `lb!date [time zone]`
 
