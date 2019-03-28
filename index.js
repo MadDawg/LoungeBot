@@ -38,7 +38,7 @@ client.on('ready', () => {
     client.user.setActivity('you all laze about', {type: 'WATCHING'});
 });
 
-client.on('message', message => { 
+client.on('message', message => {
     // check guild id and assign prefix appropriately
     // if guild id is not found in database, use default prefix
     let prefix = command_prefix;
@@ -46,7 +46,7 @@ client.on('message', message => {
         prefix = bot.initPrefix(command_prefix, message.guild.id);
     }
     catch(err){}
-    
+
     // TODO: allow command execution on mention
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
@@ -55,9 +55,9 @@ client.on('message', message => {
 
     const command = client.commands.get(commandName)
         || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-    
+
     if (!command) return;
-    
+
     if (command.admin && !message.member.permissions.has('ADMINISTRATOR')){
         return message.reply(`You need the **ADMINISTRATOR** server permission to do that!`);
     }
@@ -75,22 +75,21 @@ client.on('message', message => {
 
         return message.channel.send(reply);
     }
-    
+
     if (command.spammy){
-        // TODO: allow spammy stuff in DM channel
-        // if (!message.channel.type !== 'text') return;
-        if (!bot.isBotSpam(message.channel.id, message.guild.id)){
+        // allow spammy stuff in DM channel
+        if (message.channel.type === 'text' && !bot.isBotSpam(message.channel.id, message.guild.id)){
             return message.reply(`this command can only be executed in channels marked as bot-spam`);
         }
     }
 
     try {
         command.execute(message, args, bot);
-    } 
+    }
     catch (error) {
         console.error(error);
         message.reply('there was an error trying to execute that command!');
-    } 
+    }
 });
 
 client.login(token);
