@@ -50,7 +50,7 @@ client.on('message', message => {
     if (message.author.bot) return;
 
     // Conveniently, trailing whitespaces are eaten/ignored
-    if (message.content == `<@${client.user.id}>`){
+    if (message.content == `<@${client.user.id}>` || message.content == `<@!${client.user.id}>`){
         message.channel.send(`My command prefix is **${prefix}**`);
         return;
     }
@@ -61,12 +61,16 @@ client.on('message', message => {
         args = message.content.slice(prefix.length).split(/ +/);
     }
     // allow command execution on mention
+    // TODO: maybe use regex?
     else if (message.content.startsWith(`<@${client.user.id}>`)){
         args = message.content.slice((`<@${client.user.id}>`).length).split(/ +/);
-        if (args[0] === '') args.splice(0,1);
+    }
+    else if (message.content.startsWith(`<@!${client.user.id}>`)){
+        args = message.content.slice((`<@!${client.user.id}>`).length).split(/ +/);
     }
     else{ return; }
 
+    if (args[0] === '') args.splice(0,1);
     const commandName = args.shift().toLowerCase();
 
     const command = client.commands.get(commandName)

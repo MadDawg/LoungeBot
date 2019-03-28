@@ -7,7 +7,7 @@ module.exports = {
     description: 'List all commands or info about a specific command',
     guildOnly: false,
     args: false,
-    spammy: true,
+    spammy: false,
     admin: false,
 
     execute(message, args, bot){
