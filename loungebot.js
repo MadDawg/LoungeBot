@@ -10,17 +10,18 @@ class LoungeBot{
     constructor(){
        this._fs = require('fs');
        try{
+           // We should probably be using fs for this but eh...
            this._serverdb = require('./serverdb.json');
        }
        catch(err){
            this._serverdb = [];
        }
-    } 
-    
+    }
+
     //------ DATABASE METHODS ------
     // database contains guild IDs, command prefixes, and botspam channels
     // expected string (sample): [{"guildid":"", "prefix":"", "botspam":[]}]
-    
+
     // write to file
     writeOut(){
         const data = JSON.stringify(this._serverdb);
@@ -36,7 +37,7 @@ class LoungeBot{
     }
 
     initPrefix(prefix, guildid){
-        try{ 
+        try{
             return this._serverdb.find(x => x.guildid === guildid).prefix;
         }
         catch(err){
@@ -53,7 +54,7 @@ class LoungeBot{
         }
         return newprefix;
     }
-    
+
     // Add/remove/check/list bot-spam channels
     addBotSpam(channel, guildid){
         if (!this._serverdb.find(x => x.guildid === guildid)){ this.initDB(guildid); }
@@ -65,13 +66,13 @@ class LoungeBot{
         this.writeOut();
         return "Channel marked as bot-spam.";
     }
-    
+
     removeBotSpam(channel, guildid){
         if (!this._serverdb.find(x => x.guildid === guildid)){ this.initDB(guildid); }
-        
+
         let botspam = this._serverdb.find(x => x.guildid === guildid).botspam;
         let index = botspam.indexOf(channel);
-        
+
         if(index > -1){
             botspam.splice(index, 1);
             this.writeOut();
@@ -82,10 +83,10 @@ class LoungeBot{
 
     isBotSpam(channel, guildid){
         if (!this._serverdb.find(x => x.guildid === guildid)){ this.initDB(guildid); }
-        
+
         let botspam = this._serverdb.find(x => x.guildid === guildid).botspam;
         let index = botspam.indexOf(channel);
-        
+
         return index > -1;
     }
 

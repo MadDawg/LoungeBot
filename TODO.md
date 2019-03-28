@@ -2,9 +2,9 @@
 
 - add reset prefix command
 
-- allow commands to be executed via mention
--- a mention with no command simply shows the prefix
--- a mention with an invalid command is silently ignored
+~~- allow commands to be executed via mention~~
+~~-- a mention with no command simply shows the prefix~~
+~~-- a mention with an invalid command is silently ignored~~
 
 - add pingallin <role> to individually ping all members in <role>
 
@@ -36,4 +36,6 @@
 
 - remove commented-out code
 
-- add permissions exception to replace admin field in commands/*.js
+- add permissions exception (i.e. for try...catch) to replace admin field in command files
+
+- consider using sqlite or something to store database
