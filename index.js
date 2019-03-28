@@ -35,6 +35,7 @@ process.on('SIGINT', function() {
 
 client.on('ready', () => {
     console.log('LoungeBot: enabling your laziness since 2019!\nReady!');
+    client.user.setActivity('you all laze about', {type: 'WATCHING'});
 });
 
 client.on('message', message => { 
@@ -76,8 +77,8 @@ client.on('message', message => {
     }
     
     if (command.spammy){
-        // allow spammy stuff in DM channel
-        if (!message.channel.type !== 'text') return;
+        // TODO: allow spammy stuff in DM channel
+        // if (!message.channel.type !== 'text') return;
         if (!bot.isBotSpam(message.channel.id, message.guild.id)){
             return message.reply(`this command can only be executed in channels marked as bot-spam`);
         }

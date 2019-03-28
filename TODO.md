@@ -30,7 +30,7 @@
 
 - fix invalid URLs that may appear when performing sauce command
 
-- figure out why help.js breaks
+~~- figure out why help.js breaks~~
 
 - convert htmlparser.py to javascript to remove python dependency
 
