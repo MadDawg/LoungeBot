@@ -11,8 +11,6 @@ Arguments marked with `[]` are optional.
 ### changeprefix
 Changes the bot's command prefix.
 
-**Requires:** Administrator
-
 **Aliases:** *chpre*
 
 **Usage:** `lb!chpre <new prefix>`
@@ -38,8 +36,6 @@ Lists all channels marked as bot-spam.
 ### setbotspam
 Marks current channel as bot-spam.
 
-**Requires:** Manage channels
-
 **Aliases:** *setbs, addbotspam, addbs*
 
 **Usage:** `lb!setbs`
@@ -61,6 +57,15 @@ Searches for given image on SauceNao. Only works in channels marked as bot-spam,
 **Usage:** `lb!sauce <image url>`
 
 **Example:** `lb!sauce https://i.imgur.com/nhgYU4J.png`
+
+### date
+Display date/time. See [Wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for time zone values
+
+**Usage:** `lb!date [time zone]`
+
+**Example:** `lb!date`
+
+**Example:** `lb!date America/New_York`
 
 ### help
 Sends DM listing all commands or info about a specific command.
