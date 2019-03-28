@@ -35,3 +35,5 @@
 - convert htmlparser.py to javascript to remove python dependency
 
 - remove commented-out code
+
+- add permissions exception to replace admin field in commands/*.js
