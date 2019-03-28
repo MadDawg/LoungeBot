@@ -4,8 +4,13 @@ The minimum version numbers needed are not known, but the ones given are known t
 - [Node.js](https://nodejs.org/) v8.0.0+
 - [Discord.js](https://discord.js.org/) v11.4.2+
 - [Zombie.js](http://zombie.js.org/) v6.1.4+
+- parse5 v5.1.0+
+- xmldom v0.1.27+
+- xmlserializer v0.6.1+
+- xpath v0.0.27+
+- node-cron v2.0.3+
 - Python 3.4+
-  - [lxml](https://lxml.de/) 3.5.0+
+  - [lxml](https://lxml.de/) v3.5.0+
   - libxml2 v2.7.0+
   - libxslt v1.1.23+
   - pip/virtualenv

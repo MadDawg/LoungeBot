@@ -4,7 +4,9 @@
   "description": "Discord bot created by Lounge13",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node .",
+    "lint": "eslint ."
   },
   "author": "MadDawg",
   "license": "ISC",
@@ -13,10 +15,12 @@
     "parse5": "^5.1.0",
     "xmldom": "^0.1.27",
     "xmlserializer": "^0.6.1",
-    "xpath": "0.0.27"
+    "xpath": "^0.0.27",
+    "zombie": "^6.1.4",
+    "node-cron":"^2.0.3"
   },
   "devDependencies": {
     "mocha": "^5.2.0",
-    "zombie": "^6.1.4"
+    "eslint": "^5.15.3"
   }
 }
