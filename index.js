@@ -47,10 +47,26 @@ client.on('message', message => {
     }
     catch(err){}
 
-    // TODO: allow command execution on mention
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
+    if (message.author.bot) return;
 
-    const args = message.content.slice(prefix.length).split(/ +/);
+    // Conveniently, trailing whitespaces are eaten/ignored
+    if (message.content == `<@${client.user.id}>`){
+        message.channel.send(`My command prefix is **${prefix}**`);
+        return;
+    }
+
+    let args = "";
+
+    if (message.content.startsWith(prefix)){
+        args = message.content.slice(prefix.length).split(/ +/);
+    }
+    // allow command execution on mention
+    else if (message.content.startsWith(`<@${client.user.id}>`)){
+        args = message.content.slice((`<@${client.user.id}>`).length).split(/ +/);
+        if (args[0] === '') args.splice(0,1);
+    }
+    else{ return; }
+
     const commandName = args.shift().toLowerCase();
 
     const command = client.commands.get(commandName)

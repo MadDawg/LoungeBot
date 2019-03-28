@@ -32,8 +32,6 @@ module.exports = {
         }
         catch(err) {
             if (err instanceof RangeError){
-            //console.error(err);
-            //console.log("Defaulting to UTC");
             message.channel.send(`Invalid or unsupported timezone: ${args}`);
             format.timeZone = "UTC";
             message.channel.send(date.toLocaleString('en-GB', format));
