@@ -40,4 +40,4 @@
 
 - consider using sqlite or something to store database
 
-- determine if it is even necessary to list Node dependencies in README.md
+~~- determine if it is even necessary to list Node dependencies in README.md~~
