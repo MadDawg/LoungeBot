@@ -12,12 +12,18 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^11.4.2",
+    "node-cron": "^2.0.3",
     "parse5": "^5.1.0",
+    "sequelize": "^5.2.8",
+    "sqlite": "^3.0.3",
     "xmldom": "^0.1.27",
     "xmlserializer": "^0.6.1",
     "xpath": "^0.0.27",
-    "zombie": "^6.1.4",
-    "node-cron":"^2.0.3"
+    "zombie": "^6.1.4"
+  },
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/MadDawg/LoungeBot"
   },
   "devDependencies": {
     "mocha": "^5.2.0",
