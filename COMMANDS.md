@@ -11,11 +11,11 @@ Arguments marked with `[]` are optional.
 ### changeprefix
 Changes the bot's command prefix.
 
-**Aliases:** *chpre*
+**Aliases:** *chpre, setprefix*
 
 **Usage:** `lb!chpre <new prefix>`
 
-**Example:** `lb!chpre lb@` 
+**Example:** `lb!chpre lb@`
 
 ### echo
 Repeats given text.
