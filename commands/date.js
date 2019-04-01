@@ -32,9 +32,9 @@ module.exports = {
         }
         catch(err) {
             if (err instanceof RangeError){
-            message.channel.send(`Invalid or unsupported timezone: ${args}`);
-            format.timeZone = "UTC";
-            message.channel.send(date.toLocaleString('en-GB', format));
+                message.channel.send(`Invalid or unsupported timezone: ${args}`);
+                format.timeZone = "UTC";
+                message.channel.send(date.toLocaleString('en-GB', format));
             }
         }
     },
