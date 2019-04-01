@@ -11,6 +11,7 @@ module.exports = {
     admin: true,
 
     execute(message, args, bot){
-        message.channel.send(`Prefix **${bot.initPrefix(command_prefix, message.guild.id)}** changed to **${bot.changePrefix(args[0], prefix, message.guild.id)}**`);
+        const prefix = bot.initPrefix(command_prefix, message.guild.id);
+        message.channel.send(`Prefix **${prefix}** changed to **${bot.changePrefix(args[0], prefix, message.guild.id)}**`);
     },
 };
