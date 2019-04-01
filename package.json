@@ -1,6 +1,6 @@
 {
   "name": "loungebot",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Discord bot created by Lounge13",
   "main": "index.js",
   "scripts": {
