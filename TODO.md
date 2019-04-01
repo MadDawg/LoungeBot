@@ -39,3 +39,5 @@
 - add permissions exception (i.e. for try...catch) to replace admin field in command files
 
 - consider using sqlite or something to store database
+
+- determine if it is even necessary to list Node dependencies in README.md
