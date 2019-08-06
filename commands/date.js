@@ -32,7 +32,7 @@ module.exports = {
         }
         catch(err) {
             if (err instanceof RangeError){
-                message.channel.send(`Invalid or unsupported timezone: ${args}`);
+                message.channel.send(`Invalid or unsupported timezone: ${format.timeZone}`);
                 format.timeZone = "UTC";
                 message.channel.send(date.toLocaleString('en-GB', format));
             }
