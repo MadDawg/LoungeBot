@@ -9,6 +9,6 @@ module.exports = {
     admin: false,
 
     execute(message, args, bot){
-        message.channel.send(args.join(" "));
+        message.channel.send("> "+args.join(" "));
     },
 };
