@@ -1,3 +1,7 @@
+const Discord = require('discord.js');
+
+//TODO: implement soft character limit
+
 module.exports = {
     name: 'echo',
     aliases: ['print'],
@@ -6,9 +10,12 @@ module.exports = {
     args: true,
     usage: '<text>',
     spammy: false,
-    admin: false,
+    admin: true, // too lazy to properly prevent ping abuse...
 
     execute(message, args, bot){
-        message.channel.send("> "+args.join(" "));
+        // ...though, using embeds should remove most methods
+        const embed = new Discord.RichEmbed();
+        embed.description = args.join(" ");
+        message.channel.send(embed);
     },
 };

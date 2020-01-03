@@ -78,6 +78,8 @@ client.on('message', message => {
 
     if (!command) return;
 
+    if (command.disabled) return;
+
     if (command.admin && !message.member.permissions.has('ADMINISTRATOR')){
         return message.reply(`You need the **ADMINISTRATOR** server permission to do that!`);
     }

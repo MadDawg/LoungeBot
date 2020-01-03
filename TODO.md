@@ -41,3 +41,5 @@
 - consider using sqlite or something to store database
 
 ~~- determine if it is even necessary to list Node dependencies in README.md~~
+
+- add commands to empty roles, move users from a role to other roles
