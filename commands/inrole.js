@@ -2,8 +2,6 @@ const Discord = require('discord.js');
 
 //TODO: include offline members also
 //TODO: clean up variable names
-//TODO: unlock the witchcraft that is reaction control (the almighty Nadeko seems to have mastered it)
-//TODO: optimize (e.g. do we need to store the first page if we aren't going to use it?)
 
 module.exports = {
     name: 'inrole',
@@ -11,7 +9,7 @@ module.exports = {
     description: 'List users that are members of all given roles',
     guildOnly: true,
     args: true,
-    usage: '<role1> [... [roleN]] [page]',
+    usage: '<role1> [... [roleN]]',
     spammy: false,
     admin: true, // for now...
 
@@ -43,7 +41,7 @@ module.exports = {
         let roles = [];
         let roles_str = ""; // formatted roles string
         let pages = []; // embed "pages"
-        let page = 0; // page selector
+        let page = 1; // page selector
         const users_per_page = 15;
 
         args = Array.from(new Set(args)); // remove dupes
@@ -60,13 +58,7 @@ module.exports = {
                 member_tags = members.map(member => member.user.tag);
                 final_list = this.intersect(final_list, member_tags);
             }
-            catch (TypeError){
-                // get page number if it exists
-                try{
-                    const pagematches = args[i].match(/^(\d+)$/);
-                    page = pagematches[1];
-                } catch (TypeError){ /* nah */ }
-            }
+            catch (TypeError){ /* nah */ }
         }
 
         roles_str = roles.join(', ');
@@ -101,7 +93,48 @@ module.exports = {
             embed = pages[0];
             if (page > 0 && page <= total_pages){ embed = pages[page-1]; }
 
-            message.channel.send(embed);
+            message.channel.send(embed).then(async function (botmessage) {
+                if (total_pages < 2) return;
+                let keepgoing = true;
+                while (keepgoing){
+                    if(page-1 >= total_pages-1){
+                        await botmessage.react("⬅️")
+                    }
+                    else if(page-1 <= 0){
+                        await botmessage.react("➡️")
+                    }
+                    else{
+                        await botmessage.react("⬅️").then(() => botmessage.react("➡️"));
+                    }
+
+                    const filter = (reaction, user) => {
+                        return ['⬅️', '➡️'].includes(reaction.emoji.name) && user.id === message.author.id;
+                    };
+
+                    await botmessage.awaitReactions(filter, { max: 1, time: 10000, errors: ['time'] })
+                        .then(async function (collected) {
+                            const reaction = collected.first();
+
+                            await botmessage.clearReactions().catch(function(error){ console.error(`${error.name}: ${error.message}`); });
+    		                if (reaction.emoji.name === '➡️') {
+                                // go to next page
+                                if(page-1 >= total_pages-1) return;
+                                await page++;
+                            } else {
+                                // go to previous page
+                                if(page-1 <= 0) return;
+                                await page--;
+                            }
+                            await botmessage.edit('', pages[page-1]).catch(console.error);
+                        })
+                        .catch(collected => {
+                            botmessage.clearReactions().catch(function(error){ console.error(`${error.name}: ${error.message}`); });
+                            keepgoing = false;
+                        });
+                }
+            }).catch(function() {
+                console.error("nope.");
+            });
         }
         else{
             message.channel.send(`No users found.`);
