@@ -11,7 +11,7 @@ module.exports = {
     description: 'List users that are members of all given roles',
     guildOnly: true,
     args: true,
-    usage: '<role1> [... [roleN]]',
+    usage: '<role1> [... [roleN]] [page]',
     spammy: false,
     admin: true, // for now...
 
@@ -29,10 +29,6 @@ module.exports = {
         return message.guild.roles.get(id);
     },
 
-    display_page(number){
-        //...
-    },
-
     create_embed(roles, total_users, pageno, total_pages, users){
         const embed = new Discord.RichEmbed();
         //embed.setTitle(`Users in ${roles}: ${total_users}`);
@@ -48,14 +44,16 @@ module.exports = {
         let reply = "";
         let roles = [];
         let roles_str = ""; // formatted roles string
-        let pages = [];
+        let pages = []; // embed "pages"
+        let page = 0; // page selector
         const users_per_page = 15;
 
         args = Array.from(new Set(args)); // remove dupes
 
         for (i=0; i<args.length; i++){
-            const matches = args[i].match(/^<@&(\d+)>$/);
             try{
+                const matches = args[i].match(/^<@&(\d+)>$/);
+
                 const id = matches[1];
 
                 role = this.find_role(message, id);
@@ -65,14 +63,14 @@ module.exports = {
                 final_list = this.intersect(final_list, member_tags);
             }
             catch (TypeError){
-                //...
+                // get page number if it exists
+                try{
+                    const pagematches = args[i].match(/^(\d+)$/);
+                    page = pagematches[1];
+                } catch (TypeError){ /* nah */ }
             }
         }
 
-        /*for (i=0; i<roles.length; i++){
-            if (i == roles.length-1) roles_str += roles[i];
-            else roles_str += roles[i] + ', ';
-        }*/
         roles_str = roles.join(', ');
         if (roles.length >= 3) roles_str+=", ...";
 
@@ -83,6 +81,7 @@ module.exports = {
             let members_str = "";
             let pageno = 1;
             for (i=0, j=1; i < total_users; i++, j++){
+                // push page once we reach 15 users
                 if (j == 15){
                     j = 1;
                     members_str += final_list[i] + '\n';
@@ -95,24 +94,15 @@ module.exports = {
                     members_str += final_list[i] + '\n';
                 }
             }
+            // push final page if there are any remaining users
+            // TODO: figure out what happens if we have 0 users here
             let embed = this.create_embed(roles_str, total_users, pageno, total_pages, members_str);
             pages.push(embed);
 
-            // always print the first page
             embed = pages[0];
+            if (page > 0 && page >= total_pages){ embed = pages[page-1]; }
 
-            /*message.channel.send(embed).then(() => {
-                if (pages.length > 0){
-                    pageno = 0; // reusing previous pageno
-                    //msg.react('⬅️').then(() => message.react('➡️'))
-                    //   .catch((error) => console.error(`${error.name}: ${error.message}`));
-                }
-            });*/
             message.channel.send(embed);
-            // I'd love to use a regular string...
-            //msg.react('⬅️').then(() => message.react('➡️'))
-            //    .catch((error) => console.error(`${error.name}: ${error.message}`));
-
         }
         else{
             message.channel.send(`No users found.`);
