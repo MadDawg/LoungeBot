@@ -25,13 +25,11 @@ module.exports = {
     },
 
     find_role(message, id){
-        //return message.guild.roles.find(role => role.id == id);
         return message.guild.roles.get(id);
     },
 
     create_embed(roles, total_users, pageno, total_pages, users){
         const embed = new Discord.RichEmbed();
-        //embed.setTitle(`Users in ${roles}: ${total_users}`);
         embed.setTitle(`Users in role(s): ${total_users}`);
         embed.setColor(`#0000FF`);
         embed.setFooter(`${pageno}/${total_pages}`);
@@ -81,9 +79,9 @@ module.exports = {
             let members_str = "";
             let pageno = 1;
             for (i=0, j=1; i < total_users; i++, j++){
-                // push page once we reach 15 users
-                if (j == 15){
-                    j = 1;
+                // create and push page once we reach 15 users
+                if (j >= 15){
+                    j = 0; // will be incremented when loop iterates
                     members_str += final_list[i] + '\n';
                     const embed = this.create_embed(roles_str, total_users, pageno, total_pages, members_str);
                     pages.push(embed);
@@ -95,12 +93,13 @@ module.exports = {
                 }
             }
             // push final page if there are any remaining users
-            // TODO: figure out what happens if we have 0 users here
-            let embed = this.create_embed(roles_str, total_users, pageno, total_pages, members_str);
-            pages.push(embed);
+            if (members_str != ""){
+                let embed = this.create_embed(roles_str, total_users, pageno, total_pages, members_str);
+                pages.push(embed);
+            }
 
             embed = pages[0];
-            if (page > 0 && page >= total_pages){ embed = pages[page-1]; }
+            if (page > 0 && page <= total_pages){ embed = pages[page-1]; }
 
             message.channel.send(embed);
         }
