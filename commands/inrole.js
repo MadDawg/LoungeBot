@@ -132,9 +132,7 @@ module.exports = {
                             keepgoing = false;
                         });
                 }
-            }).catch(function() {
-                console.error("nope.");
-            });
+            }).catch(console.error);
         }
         else{
             message.channel.send(`No users found.`);
