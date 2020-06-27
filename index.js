@@ -68,7 +68,12 @@ client.on('message', message => {
     else if (message.content.startsWith(`<@!${client.user.id}>`)){
         args = message.content.slice((`<@!${client.user.id}>`).length).split(/ +/);
     }
-    else{ return; }
+    else{
+        if (bot.isAutoSauce(message.channel.id, message.guild.id)){
+            bot.getSauce(message);
+        }
+        return;
+    }
 
     if (args[0] === '') args.splice(0,1);
     const commandName = args.shift().toLowerCase();
