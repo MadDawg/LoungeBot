@@ -19,8 +19,14 @@ class LoungeBot{
     }
 
     //------ DATABASE METHODS ------
-    // database contains guild IDs, command prefixes, and botspam channels
-    // expected string (sample): [{"guildid":"", "prefix":"", "botspam":[]}]
+    // database contains:
+    // - guild IDs
+    // - command prefixes
+    // - botspam channels
+    // - autosauce channels
+    // - watchghostping boolean
+
+    // expected string (sample): [{"guildid":"", "prefix":"", "botspam":[], "autosauce":[], "watchghostping":""}]
 
     // write to file
     writeOut(){
@@ -95,6 +101,31 @@ class LoungeBot{
         if (!this._serverdb.find(x => x.guildid === guildid)){ this.initDB(guildid); }
         return (this._serverdb.find(x => x.guildid === guildid).botspam);
     }
+    /*addAutoSauce(channel, guildid){}
+    removeAutoSauce(channel, guildid){}
+    isAutoSauce(channel, guildid){}
+    getAutoSauce(guildid){}
+    doAutoSauce(message){
+        // check if channel is NSFW and adjust SauceNao URL accordingly
+        let hidelevel = "3";
+        if (message.channel.nsfw){ hidelevel = "0"; }
+        function go(){
+            browser.assert.success();
+            browser.assert.text('title', 'Sauce Found?');
+            const html = browser.html('div.result');
+
+            // parse html
+            const pyprocess = spawn('python3', ["htmlparser.py", html]);
+
+            pyprocess.stdout.on('data', (data) => {
+                const json = data.toString();
+
+                // construct and send message here!
+
+            });
+        }
+        browser.visit('http://saucenao.com/search.php?db=999&hide='+hidelevel+'&url='+args[0], go.bind(this));
+    }*/
 
     // --------------------------
 }
