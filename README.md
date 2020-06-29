@@ -14,5 +14,3 @@ Clone the repository and run `npm install` in the project directory. After doing
 After installing and configuring the bot, simply type `node index.js`
 ### Commands
 See [COMMANDS.md](COMMANDS.md)
-### To Do
-See [TODO.md](TODO.md)
