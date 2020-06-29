@@ -1,7 +1,4 @@
 const Discord = require('discord.js');
-//const Browser = require('zombie');
-//const browser = new Browser();
-//const { spawn } = require('child_process');
 
 module.exports = {
     name: 'sauce',

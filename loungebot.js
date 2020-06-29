@@ -302,13 +302,10 @@ class LoungeBot{
         return embeds;
     }
     getSauce(message, numres=1){
-        // this re expression may get recomplied every invokation?
+        // this regex may get recomplied every invokation?
         // https://urlregex.com/
         const regex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
         // return if there is no url
-        //console.log(message.content);
-        //console.log(message);
-        //console.log(message.attachments);
 
         const urls = message.content.match(regex);
         let imgurl = "";
@@ -334,9 +331,6 @@ class LoungeBot{
         // minimum similarity
         // should be good enough for now
         const minsim = "85!";
-
-        //const imgurl = "https://cdn.discordapp.com/attachments/400205362369921024/726355980622888990/77718860_p0.jpg";
-        //const imgurl = "https://ehgt.org/g/blank.gif";
         const url = `https://saucenao.com/search.php?db=${db}&hidelevel=${hidelevel}&output_type=${output_type}&testmode=${testmode}&numres=${numres}&minsim=${minsim}&url=${imgurl}`;
 
         // broken indexes/indices included
@@ -379,11 +373,6 @@ class LoungeBot{
             const status_msg = http_status_codes;
             if (resp.statusCode !== 200){
                 if (resp.statusCode === 403){
-                    /*throw {
-                        name:        "BadSauceNAOAPIKey",
-                        message:     "Server recieved invalid API key",
-                        toString:    function(){return this.name + ": " + this.message;}
-                    };*/
                     console.error("Server recieved invalid API key");
                     return;
                 }
