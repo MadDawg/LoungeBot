@@ -33,6 +33,12 @@ process.on('SIGINT', function() {
     client.destroy();
 });
 
+// gracefully end when termination signal is recieved
+/*process.on('SIGTERM', function() {
+    console.log("Logging off!");
+    client.destroy();
+});*/
+
 client.on('ready', () => {
     console.log('LoungeBot: enabling your laziness since 2019!\nReady!');
     client.user.setActivity('you all laze about', {type: 'WATCHING'});
