@@ -24,7 +24,7 @@ for (const file of commandFiles) {
 //const Cron = require('node-cron');
 
 // Our stuff
-const LoungeBot = require('./loungebot.js');
+const LoungeBot = require('./lib/loungebot.js');
 const bot = new LoungeBot();
 
 // gracefully end on keyboard interrupt (NOTE: does not work on Windows!)
