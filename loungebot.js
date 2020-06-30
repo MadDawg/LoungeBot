@@ -1,13 +1,13 @@
 "use strict";
 
 //TODO: this file may be deprecated at this point
+//TODO: should update RichEmbed to MessageEmbed,
+// but we're lazy so we'll do it later
 
 const Discord = require('discord.js');
 const fs = require('fs');
-//const Browser = require('zombie');
 const https = require('https');
 const parse = require('url-parse');
-const { spawn } = require('child_process');
 const http_status_codes = require('./resources/http_status_codes');
 
 // serverdb is the array of objects representing guild IDs
@@ -171,15 +171,13 @@ class LoungeBot{
             return [];
         }
         results.forEach((result, i) => {
-            //console.log(`Array index: ${i}`);
             const similarity = parseFloat(result.header.similarity);
-            //if (similarity < minimum_similarity) continue;
 
             const embed = new Discord.RichEmbed();
             // add result header data
             embed.setTitle("Best Guess for This Image");
             embed.setThumbnail(result.header.thumbnail);
-            embed.addField("Similarity", `${result.header.similarity}%`); // remove if called by sauce command
+            embed.addField("Similarity", `${result.header.similarity}%`);
             embed.setURL(result.data.ext_urls[0]);
 
             if (similarity > 69)
@@ -192,108 +190,108 @@ class LoungeBot{
             embed.setFooter("Sauce provided by SauceNao");
             // add other result data
             switch(result.header.index_id){
-              // don't even bother parsing the indexes object for pixiv
-              case 5:
-              case 6:
-              case indexes['drawr']:
-              case indexes['seiga']:
-              case indexes['nijie']:
-              case indexes['medibang']:
-              case indexes['bcyillust']:
-              case indexes['bcycosplay']:
-                embed.addField("Title", result.data.title);
-                embed.addField("Creator/Member", result.data.member_name);
+                // don't even bother parsing the indexes object for pixiv
+                case 5:
+                case 6:
+                case indexes['drawr']:
+                case indexes['seiga']:
+                case indexes['nijie']:
+                case indexes['medibang']:
+                case indexes['bcyillust']:
+                case indexes['bcycosplay']:
+                    embed.addField("Title", result.data.title);
+                    embed.addField("Creator/Member", result.data.member_name);
                 break;
 
-              case indexes['deviantart']:
-                embed.addField("Title", result.data.title);
-                embed.addField("Author", result.data.author_name);
+                case indexes['deviantart']:
+                    embed.addField("Title", result.data.title);
+                    embed.addField("Author", result.data.author_name);
                 break;
 
-              case indexes['hmags']:
-                embed.addField("Title", result.data.title);
-                embed.addField("Episode/Part", result.data.part);
-                embed.addField("Date", result.data.date);
+                case indexes['hmags']:
+                    embed.addField("Title", result.data.title);
+                    embed.addField("Episode/Part", result.data.part);
+                    embed.addField("Date", result.data.date);
                 break;
 
-              case indexes['hcg']:
-                embed.addField("Title", result.data.title);
-                embed.addField("Company", result.data.company);
+                case indexes['hcg']:
+                    embed.addField("Title", result.data.title);
+                    embed.addField("Company", result.data.company);
                 break;
 
-              case indexes['doujindb']:
-                break;
-
-              case indexes['hmisc']:
-                embed.addField("Title", result.data.source);
-                if (result.data.creator.length <= 5)
-                    embed.addField("Creator", this.to_string(result.data.creator));
+                case indexes['hmisc']:
+                    embed.addField("Title", result.data.source);
+                    if (result.data.creator.length <= 5)
+                        embed.addField("Creator", this.to_string(result.data.creator));
                 else
                     embed.addField("Creator", `${result.data.creator[0]} and ${result.data.creator.length} others`);
 
-                if (result.data.en_name)
-                    embed.addField("English Name", result.data.en_name);
-                if (result.data.jp_name)
-                    embed.addField("Japanese Name", result.data.jp_name);
+                    if (result.data.en_name)
+                        embed.addField("English Name", result.data.en_name);
+                    if (result.data.jp_name)
+                        embed.addField("Japanese Name", result.data.jp_name);
                 break;
 
-              case indexes['2dmarket']:
-              case indexes['fakku']:
-                embed.addField("Source", result.data.source);
-                embed.addField("Creator", result.data.creator);
+                case indexes['2dmarket']:
+                case indexes['fakku']:
+                    embed.addField("Source", result.data.source);
+                    embed.addField("Creator", result.data.creator);
                 break;
 
-              // videos
-              case indexes['anime']:
-              case indexes['hanime']:
-              case indexes['shows']:
-              case indexes['movies']:
-                embed.addField("Source", result.data.source);
-                embed.addField("Year", result.data.year);
-                if (result.data.part)
-                    embed.addField("Episode/Part", result.data.part);
-                embed.addField("Estimated Time", result.data.est_time);
+                // videos
+                case indexes['anime']:
+                case indexes['hanime']:
+                case indexes['shows']:
+                case indexes['movies']:
+                    embed.addField("Source", result.data.source);
+                    embed.addField("Year", result.data.year);
+                    if (result.data.part)
+                        embed.addField("Episode/Part", result.data.part);
+                    embed.addField("Estimated Time", result.data.est_time);
                 break;
 
-              case indexes['pawoo']:
-                embed.addField("User", result.data.pawoo_user_acct);
-                embed.addField("User Display Name", results.data.pawoo_user_display_name);
+                case indexes['pawoo']:
+                    embed.addField("User", result.data.pawoo_user_acct);
+                    embed.addField("User Display Name", results.data.pawoo_user_display_name);
                 break;
 
-              case indexes['madokami']:
-              case indexes['mangadex']:
-                embed.addField("Source", result.data.source);
-                // can be tacky and would be annoying to fix.
-                embed.addField("Part/Chapter", result.data.source);
+                case indexes['madokami']:
+                case indexes['mangadex']:
+                    embed.addField("Source", result.data.source);
+                    // can be tacky and would be annoying to fix.
+                    embed.addField("Part/Chapter", result.data.source);
                 break;
 
-              // imageboards
-              case indexes['animepictures']:
+                // imageboards
+                case indexes['konachan']:
+                case indexes['idolcomplex']:
+                case indexes['danbooru']:
+                case indexes['gelbooru']:
+                case indexes['e621']:
+                case indexes['sankaku']:
+                case indexes['yandere']:
+                    embed.addField("Creator", result.data.creator);
+                    if (result.data.material)
+                        embed.addField("Material", result.data.material);
+                    if (result.data.characters)
+                        embed.addField("Characters", result.data.characters);
+                break;
+
+                // could not find results that returned these;
+                // will need to ask staff for fields
+                case indexes['doujindb']:
+                    break;
+                case indexes['portalgraphics']:
+                    break;
+                case indexes['shutterstock']:
+                    break;
+                case indexes['animepictures']:
                 // couldn't actually get a result that returned this site,
-                // but it looks like it'd yield the same results as the others
+                // but it looks like it'd yield the same results as the other
+                // imageboards
                 break;
-              case indexes['konachan']:
-              case indexes['idolcomplex']:
-              case indexes['danbooru']:
-              case indexes['gelbooru']:
-              case indexes['e621']:
-              case indexes['sankaku']:
-              case indexes['yandere']:
-                embed.addField("Creator", result.data.creator);
-                if (result.data.material)
-                    embed.addField("Material", result.data.material);
-                if (result.data.characters)
-                    embed.addField("Characters", result.data.characters);
-                break;
-
-              // could not find results that returned these;
-              // will need to ask staff for fields
-              case indexes['portalgraphics']:
-                break;
-              case indexes['shutterstock']:
-                break;
-              //case indexes['ALL']:
-              default:
+                //case indexes['ALL']:
+                default:
                 console.log("how tho?");
                 break;
             }
@@ -332,6 +330,8 @@ class LoungeBot{
         // should be good enough for now
         const minsim = "85!";
         const url = `https://saucenao.com/search.php?db=${db}&hidelevel=${hidelevel}&output_type=${output_type}&testmode=${testmode}&numres=${numres}&minsim=${minsim}&url=${imgurl}`;
+        // fallback url in case the server gives a 429 or some other error
+        const fallback_url = `https://saucenao.com/search.php?db=${db}&hidelevel=${hidelevel}&url=${imgurl}`;
 
         // broken indexes/indices included
         const indexes = {
@@ -377,7 +377,7 @@ class LoungeBot{
                     return;
                 }
                 else{
-                    //throw new Error(`Server returned ${resp.statusCode} code`);
+                    // TODO: contruct embed containing fallback_url
                     console.error(`Server returned ${resp.statusCode} ${status_msg[String(resp.statusCode)]}`);
                     return;
                 }
