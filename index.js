@@ -27,17 +27,14 @@ for (const file of commandFiles) {
 const LoungeBot = require('./lib/loungebot.js');
 const bot = new LoungeBot();
 
-// gracefully end on keyboard interrupt (NOTE: does not work on Windows!)
-process.on('SIGINT', function() {
+function goodbye(){
     console.log("Logging off!");
     client.destroy();
-});
+}
 
-// gracefully end when termination signal is recieved
-/*process.on('SIGTERM', function() {
-    console.log("Logging off!");
-    client.destroy();
-});*/
+// gracefully end on keyboard interrupt and termination signal (NOTE: does not work on Windows!)
+process.on('SIGINT', goodbye);
+process.on('SIGTERM', goodbye);
 
 client.on('ready', () => {
     console.log('LoungeBot: enabling your laziness since 2019!\nReady!');

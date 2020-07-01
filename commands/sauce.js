@@ -1,3 +1,6 @@
+//TODO: only parse first image when given an image dump
+// and send user a message
+
 const Discord = require('discord.js');
 
 module.exports = {
@@ -11,6 +14,6 @@ module.exports = {
     admin: false,
 
     execute(message, args, bot){
-        bot.getSauce(message, 3);
+        bot.getSauce(message, args, true, 3, "85!");
     },
 };
