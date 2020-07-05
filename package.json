@@ -11,11 +11,11 @@
   "author": "MadDawg",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^11.4.2",
+    "discord.js": "^12.2.0",
     "mz": "^2.7.0",
     "node-cron": "^2.0.3",
     "parse5": "^5.1.0",
-    "sequelize": "^5.2.8",
+    "sequelize": "^5.22.3",
     "sqlite": "^3.0.3",
     "url-parse": "^1.4.7",
     "xmldom": "^0.1.27",
@@ -28,7 +28,6 @@
     "url": "https://github.com/MadDawg/LoungeBot"
   },
   "devDependencies": {
-    "mocha": "^5.2.0",
     "eslint": "^5.15.3"
   }
 }

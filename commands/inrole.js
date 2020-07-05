@@ -23,11 +23,11 @@ module.exports = {
     },
 
     find_role(message, id){
-        return message.guild.roles.get(id);
+        return message.guild.roles.fetch(id);
     },
 
     create_embed(roles, total_users, pageno, total_pages, users){
-        const embed = new Discord.RichEmbed();
+        const embed = new Discord.MessageEmbed();
         embed.setTitle(`Users in role(s): ${total_users}`);
         embed.setColor(`#0000FF`);
         embed.setFooter(`${pageno}/${total_pages}`);
@@ -35,7 +35,7 @@ module.exports = {
         return embed;
     },
 
-    execute(message, args, bot){
+    async execute(message, args, bot){
         let final_list = []; // list containing the users we were searching for
         let reply = "";
         let roles = [];
@@ -52,7 +52,7 @@ module.exports = {
 
                 const id = matches[1];
 
-                role = this.find_role(message, id);
+                const role = await this.find_role(message, id);
                 members = role.members;
                 if (roles.length < 3) roles.push(role.name);
                 member_tags = members.map(member => member.user.tag);
@@ -115,7 +115,7 @@ module.exports = {
                         .then(async function (collected) {
                             const reaction = collected.first();
 
-                            await botmessage.clearReactions().catch(function(error){ console.error(`${error.name}: ${error.message}`); });
+                            await botmessage.reactions.removeAll().catch(function(error){ console.error(`${error.name}: ${error.message}`); });
     		                if (reaction.emoji.name === '➡️') {
                                 // go to next page
                                 if(page-1 >= total_pages-1) return;
@@ -128,7 +128,7 @@ module.exports = {
                             await botmessage.edit('', pages[page-1]).catch(console.error);
                         })
                         .catch(collected => {
-                            botmessage.clearReactions().catch(function(error){ console.error(`${error.name}: ${error.message}`); });
+                            botmessage.reactions.removeAll().catch(function(error){ console.error(`${error.name}: ${error.message}`); });
                             keepgoing = false;
                         });
                 }
