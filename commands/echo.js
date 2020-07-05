@@ -1,3 +1,5 @@
+"use strict";
+
 const Discord = require('discord.js');
 
 //TODO: implement soft character limit
