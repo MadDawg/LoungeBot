@@ -1,3 +1,4 @@
+"use strict";
 // TODO: allow default timezone to be set by admin
 
 module.exports = {

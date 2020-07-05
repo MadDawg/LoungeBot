@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     name: 'listbotspam',
     aliases: ['lsbs','lsbotspam'],

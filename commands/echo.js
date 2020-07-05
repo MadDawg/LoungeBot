@@ -14,7 +14,7 @@ module.exports = {
 
     execute(message, args, bot){
         // ...though, using embeds should remove most methods
-        const embed = new Discord.RichEmbed();
+        const embed = new Discord.MessageEmbed();
         embed.description = args.join(" ");
         message.channel.send(embed);
     },

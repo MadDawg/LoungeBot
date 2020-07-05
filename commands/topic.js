@@ -12,7 +12,7 @@ module.exports = {
 
     execute(message, args, bot){
         if (message.channel.topic){
-            const embed = new Discord.RichEmbed;
+            const embed = new Discord.MessageEmbed;
             embed.addField("Channel", message.channel);
             embed.addField("Topic", message.channel.topic);
             message.channel.send(embed);

@@ -39,7 +39,7 @@ module.exports = {
         const quotes = raw.quotes;
         const links_max = links.length;
         const quotes_max = quotes.length;
-        const embed = new Discord.RichEmbed();
+        const embed = new Discord.MessageEmbed();
         if (msg != ""){
             embed.setDescription(msg);
         }

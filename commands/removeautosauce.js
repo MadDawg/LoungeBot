@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     name: 'removeautosauce',
     aliases: ['rmas','rmautosauce','rmautosource','removeautosource'],

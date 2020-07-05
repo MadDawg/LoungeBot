@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     name: 'listoffline',
     aliases: ['lsoffline', 'listoff', 'lsoff'],

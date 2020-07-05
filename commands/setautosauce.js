@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     name: 'setautosauce',
     aliases: ['setas','addbs','addautosauce','addautosource','setautosource'],

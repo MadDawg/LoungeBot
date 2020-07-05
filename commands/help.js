@@ -1,3 +1,4 @@
+"use strict";
 const { command_prefix } = require('../config.json');
 
 // TODO: use embeds 

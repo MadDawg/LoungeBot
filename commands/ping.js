@@ -11,7 +11,7 @@ module.exports = {
     admin: false,
 
     execute(message, args, bot){
-        const embed = new Discord.RichEmbed();
+        const embed = new Discord.MessageEmbed();
         const pingTime = String(new Date().getTime() - message.createdTimestamp);
         embed.description = `${pingTime} ms`;
         message.channel.send(embed);
