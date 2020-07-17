@@ -1,8 +1,4 @@
 "use strict";
-//TODO: only parse first image when given an image dump
-// and send user a message
-
-const Discord = require('discord.js');
 
 module.exports = {
     name: 'sauce',

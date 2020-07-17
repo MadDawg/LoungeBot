@@ -32,7 +32,6 @@ function goodbye(){
     client.destroy();
 }
 
-// gracefully end on keyboard interrupt and termination signal (NOTE: does not work on Windows!)
 process.on('SIGINT', goodbye);
 process.on('SIGTERM', goodbye);
 
