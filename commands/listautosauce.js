@@ -1,7 +1,7 @@
 "use strict";
 
 const Discord = require('discord.js');
-const lister = require('../lib/channel_lister.js');
+const lister = require('../lib/channel_marker.js');
 
 module.exports = {
     name: 'listautosauce',

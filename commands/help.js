@@ -1,7 +1,6 @@
 "use strict";
+const Discord = require('discord.js');
 const { command_prefix } = require('../config.json');
-
-// TODO: use embeds 
 
 module.exports = {
     name: 'help',
@@ -15,14 +14,16 @@ module.exports = {
     execute(message, args, bot){
         const data = [];
         const { commands } = message.client;
+        const embed = new Discord.MessageEmbed();
 
         if (!args.length) {
-            data.push('Here\'s a list of all commands:');
-            data.push(commands.map(command => command.name).join(', '));
-            data.push(`\nYou can send \`${command_prefix}help <command name>\` to get info on a specific command!`);
-            data.push(`\nVisit https://github.com/MadDawg/LoungeBot/blob/master/COMMANDS.md for additional information.`)
+            embed.addField("Available commands", commands.map(command => command.name).join(', '));
+            embed.setDescription(
+                `\nYou can send \`${command_prefix}help <command name>\` to get info on a specific command!` +
+                `\nVisit https://github.com/MadDawg/LoungeBot/blob/master/COMMANDS.md for additional information.`
+            );
 
-            return message.author.send(data, { split: true })
+            return message.author.send(embed)
                 .then(() => {
                     if (message.channel.type === 'dm') return;
                     message.reply('I\'ve sent you a DM with all commands!');
@@ -39,17 +40,19 @@ module.exports = {
             return message.reply('that\'s not a valid command!');
         }
 
-        data.push(`**Name:** ${command.name}`);
+        data.push({name:`Command`, value:`${command.name}`});
 
-        if (command.aliases) data.push(`**Aliases:** ${command.aliases.join(', ')}`);
-        if (command.description) data.push(`**Description:** ${command.description}`);
-        if (command.usage) data.push(`**Usage:** ${command_prefix}${command.name} ${command.usage}`);
-        if (command.spammy) data.push(`*Can only be used in channels marked as bot-spam*`);
-        if (command.admin) data.push(`*Requires **ADMINISTRATOR** server permission*`);
+        if (command.aliases) data.push({name:`Aliases`, value:`${command.aliases.join(', ')}`});
+        if (command.description) data.push({name:`Description`, value:`${command.description}`});
+        if (command.usage){
+            data.push({name:`Usage`, value:`${command_prefix}${command.name} ${command.usage}`});
+            data.push({name:`Reminder`, value:`<arg> = required, [arg] = optional`});
+        };
+        if (command.spammy) data.push({name:`Spammy`, value:`Can only be used in channels marked as bot-spam`});
+        if (command.admin) data.push({name:`Permissions`, value:`Requires **ADMINISTRATOR** server permission`});
 
-        //data.push(`**Cooldown:** ${command.cooldown || 3} second(s)`);
+        embed.addFields(data);
 
-        message.channel.send(data, { split: true });
-
+        message.channel.send(embed);
     },
 };

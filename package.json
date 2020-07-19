@@ -29,6 +29,6 @@
     "url": "https://github.com/MadDawg/LoungeBot"
   },
   "devDependencies": {
-    "eslint": "^5.15.3"
+    "eslint": "^7.5.0"
   }
 }
