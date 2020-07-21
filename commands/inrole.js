@@ -10,16 +10,16 @@ module.exports = {
     description: 'List users that are members of all given roles',
     guildOnly: true,
     args: true,
-    usage: '<role1> [... [roleN]]',
+    usage: '<role1> [roleN...]',
     spammy: false,
-    admin: true, // for now...
+    permissions: ['ADMINISTRATOR'], // for now...
 
     intersect(members1, members2){
         if (members1.length == 0 && members2.length == 0) return [];
         if (members1.length == 0) return members2;
         if (members2.length == 0) return members1;
 
-        members = members1.filter(member => members2.includes(member));
+        const members = members1.filter(member => members2.includes(member));
         return members;
     },
 
@@ -38,7 +38,7 @@ module.exports = {
 
     async execute(message, args, bot){
         let final_list = []; // list containing the users we were searching for
-        let reply = "";
+        //let reply = "";
         let roles = [];
         let roles_str = ""; // formatted roles string
         let pages = []; // embed "pages"
@@ -47,16 +47,16 @@ module.exports = {
 
         args = Array.from(new Set(args)); // remove dupes
 
-        for (i=0; i<args.length; i++){
+        for (let i=0; i<args.length; i++){
             try{
                 const matches = args[i].match(/^<@&(\d+)>$/);
 
                 const id = matches[1];
 
                 const role = await this.find_role(message, id);
-                members = role.members;
+                const members = role.members;
                 if (roles.length < 3) roles.push(role.name);
-                member_tags = members.map(member => member.user.tag);
+                const member_tags = members.map(member => member.user.tag);
                 final_list = this.intersect(final_list, member_tags);
             }
             catch (TypeError){ /* nah */ }
@@ -71,7 +71,8 @@ module.exports = {
         if (total_users > 0){
             let members_str = "";
             let pageno = 1;
-            for (i=0, j=1; i < total_users; i++, j++){
+            let j = 1;
+            for (let i=0; i < total_users; i++, j++){
                 // create and push page once we reach 15 users
                 if (j >= 15){
                     j = 0; // will be incremented when loop iterates
@@ -86,8 +87,9 @@ module.exports = {
                 }
             }
             // push final page if there are any remaining users
+            let embed = undefined;
             if (members_str != ""){
-                let embed = this.create_embed(roles_str, total_users, pageno, total_pages, members_str);
+                embed = this.create_embed(roles_str, total_users, pageno, total_pages, members_str);
                 pages.push(embed);
             }
 
@@ -99,10 +101,10 @@ module.exports = {
                 let keepgoing = true;
                 while (keepgoing){
                     if(page-1 >= total_pages-1){
-                        await botmessage.react("⬅️")
+                        await botmessage.react("⬅️");
                     }
                     else if(page-1 <= 0){
-                        await botmessage.react("➡️")
+                        await botmessage.react("➡️");
                     }
                     else{
                         await botmessage.react("⬅️").then(() => botmessage.react("➡️"));
@@ -116,8 +118,8 @@ module.exports = {
                         .then(async function (collected) {
                             const reaction = collected.first();
 
-                            await botmessage.reactions.removeAll().catch(function(error){ console.error(`${error.name}: ${error.message}`); });
-    		                if (reaction.emoji.name === '➡️') {
+                            await botmessage.reactions.removeAll().catch(function(error){ bot.logger.error(`${error.name}: ${error.message}`); });
+                            if (reaction.emoji.name === '➡️') {
                                 // go to next page
                                 if(page-1 >= total_pages-1) return;
                                 await page++;
@@ -126,17 +128,17 @@ module.exports = {
                                 if(page-1 <= 0) return;
                                 await page--;
                             }
-                            await botmessage.edit('', pages[page-1]).catch(console.error);
+                            await botmessage.edit('', pages[page-1]).catch(bot.logger.error);
                         })
                         .catch(collected => {
-                            botmessage.reactions.removeAll().catch(function(error){ console.error(`${error.name}: ${error.message}`); });
+                            botmessage.reactions.removeAll().catch(function(error){ bot.logger.error(`${error.name}: ${error.message}`); });
                             keepgoing = false;
                         });
                 }
-            }).catch(console.error);
+            }).catch(function(error){ bot.logger.error(`${error.name}: ${error.message}`); });
         }
         else{
             message.channel.send(`No users found.`);
         }
     },
-  }
+};

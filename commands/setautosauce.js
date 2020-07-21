@@ -2,12 +2,12 @@
 module.exports = {
     name: 'setautosauce',
     aliases: ['setas','addbs','addautosauce','addautosource','setautosource'],
-    description: 'Mark channel for automatic image source aquisition',
+    description: 'Mark channel(s) for automatic image source aquisition',
     guildOnly: true,
     args: false,
-    usage: '[channel] [... [channelN]]',
+    usage: '[channel...]',
     spammy: false,
-    admin: true,
+    permissions: ['MANAGE_CHANNELS'],
 
     execute(message, args, bot){
         const channels = [];

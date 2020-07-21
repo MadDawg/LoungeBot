@@ -2,12 +2,12 @@
 module.exports = {
     name: 'removeautosauce',
     aliases: ['rmas','rmautosauce','rmautosource','removeautosource'],
-    description: 'Unmark channel for auto-sauce',
+    description: 'Unmark channel(s) for auto-sauce',
     guildOnly: true,
     args: false,
-    usage: '[channel] [... [channelN]]',
+    usage: '[channel...]',
     spammy: false,
-    admin: true,
+    permissions: ['MANAGE_CHANNELS'],
 
     execute(message, args, bot){
         //message.channel.send(bot.removeAutoSauce(message.channel.id, message.guild.id));

@@ -9,7 +9,7 @@ module.exports = {
     args: true,
     usage: '<new prefix>',
     spammy: false,
-    admin: true,
+    permissions: ['ADMINISTRATOR'],
 
     execute(message, args, bot){
         const prefix = bot.initPrefix(command_prefix, message.guild.id);

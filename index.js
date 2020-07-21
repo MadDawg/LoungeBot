@@ -2,10 +2,8 @@
 
 // Node.js stuff
 const fs = require('fs');
-//const { spawn } = require('child_process');
 
 // Discord stuff
-// TODO: add owner field to config.json
 const {token, command_prefix} = require('./config.json');
 const Discord = require('discord.js');
 const client = new Discord.Client();
@@ -19,24 +17,24 @@ for (const file of commandFiles) {
 }
 
 // Other third-party stuff
-//const Browser = require('zombie');
-//const browser = new Browser();
 //const Cron = require('node-cron');
 
 // Our stuff
 const LoungeBot = require('./lib/loungebot.js');
 const bot = new LoungeBot();
+const logger = bot.logger;
 
 function goodbye(){
-    console.log("Logging off!");
+    logger.info("Logging off!");
     client.destroy();
 }
 
 process.on('SIGINT', goodbye);
 process.on('SIGTERM', goodbye);
+process.on('uncaughtException', error => logger.error(error));
 
 client.on('ready', () => {
-    console.log('LoungeBot: enabling your laziness since 2019!\nReady!');
+    logger.info('LoungeBot: enabling your laziness since 2019!');
     client.user.setActivity('you all laze about', {type: 'WATCHING'});
 });
 
@@ -87,8 +85,13 @@ client.on('message', message => {
 
     if (command.disabled) return;
 
-    if (command.admin && !message.member.permissions.has('ADMINISTRATOR')){
-        return message.reply(`You need the **ADMINISTRATOR** server permission to do that!`);
+    if (command.permissions && command.permissions.length){
+        for (let i = 0; i < command.permissions.length; i++){
+            const permission = command.permissions[i];
+            if (!message.member.permissions.has(permission)){
+                return message.reply(`You need the following permissions: ${command.permissions.join(', ')}`);
+            }
+        }
     }
 
     if (command.guildOnly && message.channel.type !== 'text') {
@@ -117,7 +120,7 @@ client.on('message', message => {
         command.execute(message, args, bot);
     }
     catch (error) {
-        console.error(error);
+        logger.error(error);
         message.reply('there was an error trying to execute that command!');
     }
 });

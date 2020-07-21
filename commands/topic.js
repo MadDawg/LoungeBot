@@ -23,4 +23,4 @@ module.exports = {
             message.channel.send(`Topic for ${message.channel} is not set.`);
         }
     },
-  }
+  };

@@ -2,12 +2,12 @@
 module.exports = {
     name: 'removebotspam',
     aliases: ['rmbs','rmbotspam'],
-    description: 'Unmark channel as bot-spam',
+    description: 'Unmark channel(s) as bot-spam',
     guildOnly: true,
     args: false,
-    usage: '[channel] [... [channelN]]',
+    usage: '[channel...]',
     spammy: false,
-    admin: true,
+    permissions: ['MANAGE_CHANNELS'],
 
     execute(message, args, bot){
         //message.channel.send(bot.removeBotSpam(message.channel.id, message.guild.id));

@@ -2,12 +2,12 @@
 module.exports = {
     name: 'setbotspam',
     aliases: ['setbs', 'addbotspam', 'addbs'],
-    description: 'Mark channel as bot-spam',
+    description: 'Mark channel(s) as bot-spam',
     guildOnly: true,
     args: false,
-    usage: '[channel] [... [channelN]]',
+    usage: '[channel...]',
     spammy: false,
-    admin: true,
+    permissions: ['MANAGE_CHANNELS'],
 
     execute(message, args, bot){
         const channels = [];

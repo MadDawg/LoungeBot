@@ -19,10 +19,10 @@
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.3.0",
     "url-parse": "^1.4.7",
+    "winston": "^3.3.3",
     "xmldom": "^0.1.27",
     "xmlserializer": "^0.6.1",
-    "xpath": "^0.0.27",
-    "zombie": "^6.1.4"
+    "xpath": "^0.0.27"
   },
   "repository": {
     "type": "git",

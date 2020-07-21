@@ -9,7 +9,7 @@ module.exports = {
     guildOnly: false,
     args: false,
     spammy: false,
-    admin: false,
+    permissions: [],
 
     execute(message, args, bot){
         const data = [];
@@ -29,7 +29,7 @@ module.exports = {
                     message.reply('I\'ve sent you a DM with all commands!');
                 })
                 .catch(error => {
-                    console.error(`Could not send help DM to ${message.author.tag}.\n`, error);
+                    bot.logger.error(`Could not send help DM to ${message.author.tag}.\n`, error);
                     message.reply('failed to send DM. Do you have DMs disabled?');
                 });
         }
@@ -45,11 +45,11 @@ module.exports = {
         if (command.aliases) data.push({name:`Aliases`, value:`${command.aliases.join(', ')}`});
         if (command.description) data.push({name:`Description`, value:`${command.description}`});
         if (command.usage){
-            data.push({name:`Usage`, value:`${command_prefix}${command.name} ${command.usage}`});
-            data.push({name:`Reminder`, value:`<arg> = required, [arg] = optional`});
-        };
+            data.push({name:`Usage`, value:`${command_prefix}${command.name} ${command.usage}\n` +
+                `*reminder: <arg> = required, [arg] = optional*`});
+        }
         if (command.spammy) data.push({name:`Spammy`, value:`Can only be used in channels marked as bot-spam`});
-        if (command.admin) data.push({name:`Permissions`, value:`Requires **ADMINISTRATOR** server permission`});
+        if (command.permissions && command.permissions.length) data.push({name:`Required Permissions`, value:`${command.permissions.join(', ')}`});
 
         embed.addFields(data);
 

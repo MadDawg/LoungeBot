@@ -11,7 +11,7 @@ module.exports = {
     description: 'FBI! Open up! (shows random FBI/police image)',
     guildOnly: true,
     args: false,
-    usage: '[user] [... [userN]]',
+    usage: '[user...]',
     spammy: false,
     admin: false,
 
@@ -30,7 +30,7 @@ module.exports = {
             msg = `${args[0]} and ${args[1]} have been arrested!`;
         }
         else if (args.length > 2){
-            for (i=0; i < args.length-1; i++){
+            for (let i=0; i < args.length-1; i++){
                 msg += `${args[i]}, `;
             }
             msg += `and ${args[args.length-1]} have been arrested!`;
@@ -53,4 +53,4 @@ module.exports = {
 
         message.channel.send(embed);
     },
-  }
+  };

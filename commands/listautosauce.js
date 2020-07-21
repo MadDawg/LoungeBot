@@ -1,6 +1,5 @@
 "use strict";
 
-const Discord = require('discord.js');
 const lister = require('../lib/channel_marker.js');
 
 module.exports = {
@@ -14,7 +13,6 @@ module.exports = {
     admin: false,
 
     execute(message, args, bot){
-        //TODO: format this as embed
         let autosauce = bot.getAutoSauce(message.guild.id);
         if(!autosauce || !autosauce.length){ return message.channel.send("No channels are marked for auto-sauce."); }
         lister.list_channels(message, autosauce);
