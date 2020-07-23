@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
     name: 'setautosauce',
-    aliases: ['setas','addbs','addautosauce','addautosource','setautosource'],
+    aliases: ['setas','addas','addautosauce','addautosource','setautosource'],
     description: 'Mark channel(s) for automatic image source aquisition',
     guildOnly: true,
     args: false,
@@ -13,6 +13,7 @@ module.exports = {
         const channels = [];
         const regex = /(<#)?(\d+)(>)?/;
         if (args && args.length){
+            args = Array.from(new Set(args));
             for (let i = 0; i < args.length; i++){
                 const arg = args[i].match(regex)[2];
                 const channel = message.guild.channels.resolve(arg);

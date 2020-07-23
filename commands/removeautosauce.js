@@ -14,6 +14,7 @@ module.exports = {
         const channels = [];
         const regex = /(<#)?(\d+)(>)?/;
         if (args && args.length){
+            args = Array.from(new Set(args));
             for (let i = 0; i < args.length; i++){
                 const arg = args[i].match(regex)[2];
                 const channel = message.guild.channels.resolve(arg);

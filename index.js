@@ -31,7 +31,7 @@ function goodbye(){
 
 process.on('SIGINT', goodbye);
 process.on('SIGTERM', goodbye);
-process.on('uncaughtException', error => logger.error(error));
+process.on('uncaughtException', error => logger.crit(error));
 
 client.on('ready', () => {
     logger.info('LoungeBot: enabling your laziness since 2019!');
@@ -105,7 +105,7 @@ client.on('message', message => {
             reply += `\nUsage: \`${prefix}${command.name} ${command.usage}\``;
         }
 
-        return message.channel.send(reply);
+        return message.reply(reply);
     }
 
     if (command.spammy){
