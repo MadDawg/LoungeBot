@@ -10,11 +10,11 @@ module.exports = {
     args: false,
     usage: '',
     spammy: false,
-    admin: false,
+    permissions: [],
 
     execute(message, args, bot){
         let botspam = bot.getBotSpam(message.guild.id);
         if(!botspam || !botspam.length){ return message.channel.send("No channels are marked as bot-spam."); }
-        lister.list_channels(message, botspam);
+        lister.list_channels(message, botspam, "Bot-spam Channels");
     },
 };

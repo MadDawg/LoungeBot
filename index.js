@@ -99,7 +99,7 @@ client.on('message', message => {
     }
 
     if (command.args && !args.length){
-        let reply = `Error: no arguments provided!`;
+        let reply = `no arguments provided!`;
 
         if (command.usage) {
             reply += `\nUsage: \`${prefix}${command.name} ${command.usage}\``;

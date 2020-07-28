@@ -8,9 +8,9 @@ module.exports = {
     args: true,
     usage: '<image URL>',
     spammy: true,
-    admin: false,
+    permissions: [],
 
     execute(message, args, bot){
-        bot.getSauce(message, args, true, 3, "85!");
+        bot.getSauce(message, args, true, 3, "65!");
     },
 };
