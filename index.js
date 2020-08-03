@@ -29,9 +29,14 @@ function goodbye(){
     client.destroy();
 }
 
+function badbye(error){
+    logger.crit(error);
+    goodbye();
+}
+
 process.on('SIGINT', goodbye);
 process.on('SIGTERM', goodbye);
-process.on('uncaughtException', error => logger.crit(error));
+process.on('uncaughtException', badbye);
 
 client.on('ready', () => {
     logger.info('LoungeBot: enabling your laziness since 2019!');
@@ -75,7 +80,12 @@ client.on('message', message => {
         return;
     }
 
+
     if (args[0] === '') args.splice(0,1);
+
+    // avoid breaking when prefix is entered with no command
+    if (!args.length){ return; }
+
     const commandName = args.shift().toLowerCase();
 
     const command = client.commands.get(commandName)
