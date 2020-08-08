@@ -42,7 +42,7 @@ module.exports = {
 
         data.push({name:`Command`, value:`${command.name}`});
 
-        if (command.aliases) data.push({name:`Aliases`, value:`${command.aliases.join(', ')}`});
+        if (command.aliases && command.aliases.length) data.push({name:`Aliases`, value:`${command.aliases.join(', ')}`});
         if (command.description) data.push({name:`Description`, value:`${command.description}`});
         if (command.usage){
             data.push({name:`Usage`, value:`${command_prefix}${command.name} ${command.usage}\n` +

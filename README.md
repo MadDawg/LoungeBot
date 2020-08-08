@@ -6,8 +6,9 @@
 Clone the repository and run `npm install` in the project directory. After doing so, you will need to create a config.json file with the following fields:
 ```
 {
-    "token":"YOUR_TOKEN_HERE",
-    "command_prefix":"lb!"
+    "token":"YOUR_DISCORD_BOT_TOKEN_HERE",
+    "command_prefix":"lb!",
+    "saucenao_api_key":"YOUR_SAUCENAO_API_KEY_HERE"
 }
 ```
 ### Launching the Bot

@@ -10,6 +10,9 @@
   },
   "author": "MadDawg",
   "license": "ISC",
+  "engines":{
+      "node": ">=12.18.0"
+  },
   "dependencies": {
     "discord.js": "^12.2.0",
     "mz": "^2.7.0",
@@ -29,6 +32,8 @@
     "url": "https://github.com/MadDawg/LoungeBot"
   },
   "devDependencies": {
-    "eslint": "^7.5.0"
+    "eslint": "^7.5.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-security": "^1.4.0"
   }
 }

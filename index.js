@@ -37,6 +37,7 @@ function badbye(error){
 process.on('SIGINT', goodbye);
 process.on('SIGTERM', goodbye);
 process.on('uncaughtException', badbye);
+process.on('unhandledRejection', badbye);
 
 client.on('ready', () => {
     logger.info('LoungeBot: enabling your laziness since 2019!');
