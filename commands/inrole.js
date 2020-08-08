@@ -3,6 +3,8 @@ const Discord = require('discord.js');
 
 //TODO: include offline members also
 //TODO: clean up variable names
+// intersecting a role (array) with an empty one should logically return an empty array
+// but that's not what happens here. We may or may not keep this behavior.
 
 module.exports = {
     name: 'inrole',
@@ -15,9 +17,9 @@ module.exports = {
     permissions: ['ADMINISTRATOR'], // for now...
 
     intersect(members1, members2){
-        if (members1.length == 0 && members2.length == 0) return [];
-        if (members1.length == 0) return members2;
-        if (members2.length == 0) return members1;
+        if (!members1.length && !members2.length) return [];
+        if (!members1.length) return members2;
+        if (!members2.length) return members1;
 
         const members = members1.filter(member => members2.includes(member));
         return members;

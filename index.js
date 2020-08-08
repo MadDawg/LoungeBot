@@ -56,7 +56,7 @@ client.on('message', message => {
     if (message.author.bot) return;
 
     // Conveniently, trailing whitespaces are eaten/ignored
-    if (message.content == `<@${client.user.id}>` || message.content == `<@!${client.user.id}>`){
+    if (message.content === `<@${client.user.id}>` || message.content === `<@!${client.user.id}>`){
         message.channel.send(`My command prefix is **${prefix}**`);
         return;
     }

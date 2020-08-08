@@ -4,6 +4,7 @@ const fs = require('fs');
 const Discord = require('discord.js');
 
 // TODO: check users
+// TODO: check for role input
 
 module.exports = {
     name: 'fbi',
@@ -13,7 +14,7 @@ module.exports = {
     args: false,
     usage: '[user...]',
     spammy: false,
-    admin: false,
+    permissions: [],
 
     random_int(max){
         return Math.floor(Math.random()*Math.floor(max));
@@ -23,10 +24,10 @@ module.exports = {
         let msg = "";
         args = Array.from(new Set(args)); // remove dupes
 
-        if (args.length == 1){
+        if (args.length === 1){
             msg = `${args[0]} is under arrest!`;
         }
-        else if (args.length == 2){
+        else if (args.length === 2){
             msg = `${args[0]} and ${args[1]} have been arrested!`;
         }
         else if (args.length > 2){
@@ -53,4 +54,4 @@ module.exports = {
 
         message.channel.send(embed);
     },
-  };
+  }

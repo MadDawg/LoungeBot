@@ -10,7 +10,7 @@ module.exports = {
     args: false,
     //usage:,
     spammy: false,
-    admin: false,
+    permissions: [],
 
     execute(message, args, bot){
         if (message.channel.topic){
@@ -23,4 +23,4 @@ module.exports = {
             message.channel.send(`Topic for ${message.channel} is not set.`);
         }
     },
-  };
+  }

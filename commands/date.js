@@ -9,7 +9,7 @@ module.exports = {
     args: false,
     usage: '[timezone]',
     spammy: false,
-    admin: false,
+    permissions: [],
 
     execute(message, args, bot){
         const format = {
