@@ -10,7 +10,7 @@ module.exports = {
     args: false,
     usage: '',
     spammy: false,
-    admin: false,
+    permissions: [],
 
     execute(message, args, bot){
         const embed = new Discord.MessageEmbed();
