@@ -100,7 +100,7 @@ client.on('message', message => {
         for (let i = 0; i < command.permissions.length; i++){
             const permission = command.permissions[i];
             if (!message.member.permissions.has(permission)){
-                return message.reply(`You need the following permissions: ${command.permissions.join(', ')}`);
+                return message.reply(`you need the following permissions: ${command.permissions.join(', ')}`);
             }
         }
     }
