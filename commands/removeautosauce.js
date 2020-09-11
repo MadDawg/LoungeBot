@@ -20,7 +20,7 @@ module.exports = {
                 const channel = message.guild.channels.resolve(arg);
                 if (channel){ channels.push(channel); }
                 else{ /**/ }
-            };
+            }
         }
         if (channels.length){
             message.channel.send(bot.removeAutoSauce(channels, message.guild.id));

@@ -61,7 +61,7 @@ module.exports = {
                 const member_tags = members.map(member => member.user.tag);
                 final_list = this.intersect(final_list, member_tags);
             }
-            catch (TypeError){ /* nah */ }
+            catch (err){ /* nah */ }
         }
 
         roles_str = roles.join(', ');

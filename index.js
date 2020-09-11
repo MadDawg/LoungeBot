@@ -49,7 +49,7 @@ client.on('message', message => {
     // if guild id is not found in database, use default prefix
     let prefix = command_prefix;
     try{
-        prefix = bot.initPrefix(command_prefix, message.guild.id);
+        prefix = bot.getPrefix(command_prefix, message.guild.id);
     }
     catch(err){}
 
@@ -61,7 +61,7 @@ client.on('message', message => {
         return;
     }
 
-    let args = "";
+    let args = [];
 
     if (message.content.startsWith(prefix)){
         args = message.content.slice(prefix.length).split(/ +/);
@@ -76,7 +76,12 @@ client.on('message', message => {
     }
     else{
         if (bot.isAutoSauce(message.channel.id, message.guild.id)){
-            bot.getSauce(message);
+            bot.getSauce(message, {
+                args: [],
+                manually_invoked: false,
+                numres: "2",
+                minsim: "65!"
+            });
         }
         return;
     }

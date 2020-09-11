@@ -11,6 +11,11 @@ module.exports = {
     permissions: [],
 
     execute(message, args, bot){
-        bot.getSauce(message, args, true, "3", "65!");
+        bot.getSauce(message, {
+            args: args,
+            manually_invoked: true,
+            numres: "3",
+            minsim: "65!"
+        });
     },
 };

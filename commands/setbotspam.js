@@ -19,7 +19,7 @@ module.exports = {
                 const channel = message.guild.channels.resolve(arg);
                 if (channel){ channels.push(channel); }
                 else{ /**/ }
-            };
+            }
         }
         if (channels.length){
             message.channel.send(bot.addBotSpam(channels, message.guild.id));
