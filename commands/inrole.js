@@ -14,7 +14,7 @@ module.exports = {
     args: true,
     usage: '<role1> [roleN...]',
     spammy: false,
-    permissions: ['ADMINISTRATOR'], // for now...
+    permissions: [],
 
     intersect(members1, members2){
         if (!members1.length && !members2.length) return [];
