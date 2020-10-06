@@ -33,8 +33,11 @@ module.exports = {
         const tag_regex = /^\w+\#\d{4}$/;
         const id_regex = /^\d+$/;
 
+        if (!args.length){
+            member = message.member;
+        }
         // if mention
-        if (message.mentions && message.mentions.members.array().length){
+        else if (message.mentions && message.mentions.members.array().length){
             member = message.mentions.members.first();
         }
         // if tag (works only if typed exactly as displayed (casing))
@@ -54,15 +57,15 @@ module.exports = {
         }
 
         if (member){
-            embed.setTitle("User Info");
+            embed.setTitle(`User Info for ${member.user.tag}`);
             embed.setThumbnail(member.user.displayAvatarURL({dynamic:true}));
             embed.addField("ID", member.id);
             embed.addField("Tag", member.user.tag);
             if (member.nickname){
                 embed.addField("Nickname", member.nickname);
             }
-            embed.addField("Account created", new Date(member.user.createdTimestamp).toLocaleString('en-GB', format));
-            embed.addField("Joined", new Date(member.joinedTimestamp).toLocaleString('en-GB', format));
+            embed.addField("Account Creation Date", new Date(member.user.createdTimestamp).toLocaleString('en-GB', format));
+            embed.addField("Join Date", new Date(member.joinedTimestamp).toLocaleString('en-GB', format));
 
             message.channel.send(embed);
         }

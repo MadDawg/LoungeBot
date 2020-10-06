@@ -16,6 +16,10 @@ module.exports = {
         if (args[0].length < 2){
             return message.channel.send(`New prefix must be 2 or more characters long. Prefix unchanged.`);
         }
-        message.channel.send(`Prefix **${prefix}** changed to **${bot.changePrefix(args[0], prefix, message.guild.id)}**`);
+        message.channel.send('', {
+            embed: {
+                description: `Prefix \`${prefix}\` changed to \`${bot.changePrefix(args[0], prefix, message.guild.id)}\``
+            }
+        });
     },
 };

@@ -57,7 +57,7 @@ client.on('message', message => {
 
     // Conveniently, trailing whitespaces are eaten/ignored
     if (message.content === `<@${client.user.id}>` || message.content === `<@!${client.user.id}>`){
-        message.channel.send(`My command prefix is **${prefix}**`);
+        message.channel.send('', {embed: {description: `My command prefix is \`${prefix}\``}})
         return;
     }
 
