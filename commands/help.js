@@ -20,7 +20,7 @@ module.exports = {
             embed.addField("Available commands", commands.map(command => command.name).join(', '));
             embed.setDescription(
                 `\nYou can send \`${command_prefix}help <command name>\` to get info on a specific command!` +
-                `\nVisit https://github.com/MadDawg/LoungeBot/blob/master/COMMANDS.md for additional information.`
+                `\nVisit the [commands page](https://github.com/MadDawg/LoungeBot/blob/master/COMMANDS.md) for additional information.`
             );
 
             return message.author.send(embed)
