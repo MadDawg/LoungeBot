@@ -12,10 +12,9 @@ module.exports = {
     args: true,
     usage: '<text>',
     spammy: false,
-    permissions: ['ADMINISTRATOR'], // too lazy to properly prevent ping abuse...
+    permissions: [],
 
     execute(message, args, bot){
-        // ...though, using embeds should remove most methods
         const embed = new Discord.MessageEmbed();
         embed.description = args.join(" ");
         message.channel.send(embed);

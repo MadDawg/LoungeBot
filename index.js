@@ -40,7 +40,14 @@ process.on('uncaughtException', badbye);
 process.on('unhandledRejection', badbye);
 
 client.on('ready', () => {
-    logger.info('LoungeBot: enabling your laziness since 2019!');
+    // we'll forgive the usage of console.log here
+    console.log("    __                                 ____        __ \n"
+        + "   \/ \/   ____  __  ______  ____ ____  \/ __ )____  \/ \/_\n"
+        + "  \/ \/   \/ __ \\\/ \/ \/ \/ __ \\\/ __ `\/ _ \\\/ __  \/ __ \\\/ __\/\n"
+        + " \/ \/___\/ \/_\/ \/ \/_\/ \/ \/ \/ \/ \/_\/ \/  __\/ \/_\/ \/ \/_\/ \/ \/_  \n"
+        + "\/_____\/\\____\/\\__,_\/_\/ \/_\/\\__, \/\\___\/_____\/\\____\/\\__\/  \n"
+        + "                        \/____\/        \n"
+        + "Enabling your laziness since 2019");
     client.user.setActivity('you all laze about', {type: 'WATCHING'});
 });
 
