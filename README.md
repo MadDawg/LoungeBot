@@ -1,6 +1,6 @@
 # LoungeBot
 ### Dependencies
-- [Node.js](https://nodejs.org/) v12.18.1+
+- [Node.js](https://nodejs.org/) v14.0.0+
 
 ### Installation
 Clone the repository and run `npm install` in the project directory. After doing so, you will need to create a config.json file with the following fields:
