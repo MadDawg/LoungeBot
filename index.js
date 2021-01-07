@@ -48,6 +48,7 @@ client.on('ready', () => {
         + "\/_____\/\\____\/\\__,_\/_\/ \/_\/\\__, \/\\___\/_____\/\\____\/\\__\/  \n"
         + "                        \/____\/        \n"
         + "Enabling your laziness since 2019");
+
     client.user.setActivity('you all laze about', {type: 'WATCHING'});
 });
 
