@@ -1,15 +1,16 @@
 "use strict";
+
+// BROKEN!
+
 const Discord = require('discord.js');
 
 //TODO: include offline members also
 //TODO: clean up variable names
-// intersecting a role (array) with an empty one should logically return an empty array
-// but that's not what happens here. We may or may not keep this behavior.
 
 module.exports = {
     name: 'inrole',
     aliases: ['intersectroles', 'roleintersect', 'whohas', 'inroles'],
-    description: 'List users that are members of all given roles',
+    description: 'List users that are members of all given roles (empty roles are ignored)',
     guildOnly: true,
     args: true,
     usage: '<role1> [roleN...]',
@@ -17,9 +18,10 @@ module.exports = {
     permissions: [],
 
     intersect(members1, members2){
-        if (!members1.length && !members2.length) return [];
+        if (!members1.length || !members2.length) return [];
+        /*if (!members1.length && !members2.length) return [];
         if (!members1.length) return members2;
-        if (!members2.length) return members1;
+        if (!members2.length) return members1;*/
 
         const members = members1.filter(member => members2.includes(member));
         return members;
@@ -47,25 +49,37 @@ module.exports = {
         let page = 1; // page selector
         const users_per_page = 15;
 
-        args = Array.from(new Set(args)); // remove dupes
+        //args = Array.from(new Set(args)); // remove dupes
+        const roles_mentioned = message.mentions.roles.array();
 
-        for (let i=0; i<args.length; i++){
+        //for (let i=0; i<args.length; i++){
+        for (let i = 0; i < roles_mentioned.length; i++){
             try{
-                const matches = args[i].match(/^<@&(\d+)>$/);
-
-                const id = matches[1];
-
-                const role = await this.find_role(message, id);
-                const members = role.members;
-                if (roles.length < 3) roles.push(role.name);
+                //const matches = args[i].match(/^<@&(\d+)>$/);
+                //const matches = args[i].match(Discord.MessageMentions.ROLES_PATTERN);
+                //const id = matches[1];
+                const role = roles_mentioned[i];
+                const members = role.members.array();
+                if (!members.length){ continue; } //ignore empty role
+                if (roles.length < 3){ roles.push(role.name); }
                 const member_tags = members.map(member => member.user.tag);
-                final_list = this.intersect(final_list, member_tags);
+
+                // final_list is empty on first iteration,
+                // so avoid intersecting it and just use member_tags
+                if (i > 0){
+                    final_list = this.intersect(final_list, member_tags);
+                }
+                else { final_list = member_tags; }
             }
-            catch (err){ /* nah */ }
+            catch (err){
+                if (err instanceof TypeError){
+                    bot.logger.error(`${this.name}: invalid role entered`);
+                }
+            }
         }
 
         roles_str = roles.join(', ');
-        if (roles.length >= 3) roles_str+=", ...";
+        if (roles.length >= 3){ roles_str+=", ..."; }
 
         const total_users = final_list.length;
         const total_pages = Math.ceil(total_users/users_per_page);

@@ -53,6 +53,9 @@ client.on('ready', () => {
 });
 
 client.on('message', message => {
+    // ignore messages from other bots
+    if (message.author.bot) return;
+
     // check guild id and assign prefix appropriately
     // if guild id is not found in database, use default prefix
     let prefix = command_prefix;
@@ -60,8 +63,6 @@ client.on('message', message => {
         prefix = bot.getPrefix(command_prefix, message.guild.id);
     }
     catch(err){}
-
-    if (message.author.bot) return;
 
     // Conveniently, trailing whitespaces are eaten/ignored
     if (message.content === `<@${client.user.id}>` || message.content === `<@!${client.user.id}>`){
@@ -93,7 +94,6 @@ client.on('message', message => {
         }
         return;
     }
-
 
     if (args[0] === '') args.splice(0,1);
 
