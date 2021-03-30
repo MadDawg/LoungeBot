@@ -88,7 +88,7 @@ client.on('message', message => {
             bot.getSauce(message, {
                 args: [],
                 manually_invoked: false,
-                numres: "2",
+                numres: "8",
                 minsim: "65!"
             });
         }

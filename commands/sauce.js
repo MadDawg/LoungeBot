@@ -5,7 +5,7 @@ module.exports = {
     aliases: ['source'],
     description: 'Search SauceNAO for image source',
     guildOnly: false,
-    args: true,
+    args: false,
     usage: '<image URL>',
     spammy: true,
     permissions: [],
