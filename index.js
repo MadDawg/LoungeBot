@@ -136,7 +136,7 @@ client.on('message', message => {
         // allow spammy stuff in DM channel
         // TODO: add admin bypass
         if (message.channel.type === 'text' && !bot.isBotSpam(message.channel.id, message.guild.id)){
-            return message.reply(`this command can only be executed in channels marked as bot-spam`);
+            return message.reply(`this command can only be executed in channels marked by the bot as bot-spam`);
         }
     }
 
