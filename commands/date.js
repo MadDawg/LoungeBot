@@ -28,11 +28,11 @@ module.exports = {
         const date = new Date();
 
         try{
-            if (args != "") format.timeZone = args;
+            format.timeZone = args[0];
             message.channel.send(date.toLocaleString('en-GB', format));
         }
         catch(err) {
-            if (err instanceof RangeError){
+            if (err instanceof RangeError || err instanceof TypeError){
                 message.channel.send(`Invalid or unsupported timezone: ${format.timeZone}`);
                 format.timeZone = "UTC";
                 message.channel.send(date.toLocaleString('en-GB', format));

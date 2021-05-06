@@ -59,5 +59,13 @@
     "507": "Insufficient Storage",
     "508": "Loop Detected",
     "510": "Not Extended",
-    "511": "Network Authentication Required"
+    "511": "Network Authentication Required",
+    "520": "web server returned an unknown error",
+    "521": "web server is down",
+    "522": "connection timed out",
+    "523": "origin is unreachable",
+    "524": "a timeout occurred",
+    "525": "SSL handshake failed",
+    "526": "invalid SSL certificate",
+    "527": "Railgun Listener to origin error"
 }
