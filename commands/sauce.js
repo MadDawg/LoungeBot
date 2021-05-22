@@ -11,6 +11,13 @@ module.exports = {
     permissions: [],
 
     execute(message, args, bot){
+        if (!args.length && !message.attachments.first()){
+            let reply = `no arguments provided!`
+            + `\nUsage: \`${bot.getPrefix("lb!", message.guild.id)}${this.name} ${this.usage}\``
+            + ` or \`${bot.getPrefix("lb!", message.guild.id)}${this.name} <image attachment>\``;
+            return message.reply(reply);
+        }
+
         bot.getSauce(message, {
             args: args,
             manually_invoked: true,
