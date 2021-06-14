@@ -21,7 +21,7 @@ module.exports = {
         bot.getSauce(message, {
             args: args,
             manually_invoked: true,
-            numres: "3",
+            numres: "8", // we will still only show 3 results
             minsim: "65!"
         });
     },
