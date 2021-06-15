@@ -1,12 +1,18 @@
 "use strict";
 
-// Node.js stuff
-const fs = require('fs');
 
-// Discord stuff
-const {token, command_prefix} = require('./config.json');
+const fs = require('fs');
+//const {token, command_prefix} = require('./config/config.json');
 const Discord = require('discord.js');
 const client = new Discord.Client();
+const LoungeBot = require('./lib/loungebot.js');
+
+const bot = new LoungeBot();
+const logger = bot.logger;
+const token = bot.token;
+const api_key = bot.api_key;
+const command_prefix = bot.command_prefix;
+
 client.commands = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -16,13 +22,7 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 
-// Other third-party stuff
-//const Cron = require('node-cron');
 
-// Our stuff
-const LoungeBot = require('./lib/loungebot.js');
-const bot = new LoungeBot();
-const logger = bot.logger;
 
 function goodbye(){
     logger.info("Logging off!");
@@ -41,28 +41,30 @@ process.on('unhandledRejection', badbye);
 
 client.on('ready', () => {
     // we'll forgive the usage of console.log here
-    console.log("    __                                 ____        __ \n"
+    /*console.log("    __                                 ____        __ \n"
         + "   \/ \/   ____  __  ______  ____ ____  \/ __ )____  \/ \/_\n"
         + "  \/ \/   \/ __ \\\/ \/ \/ \/ __ \\\/ __ `\/ _ \\\/ __  \/ __ \\\/ __\/\n"
         + " \/ \/___\/ \/_\/ \/ \/_\/ \/ \/ \/ \/ \/_\/ \/  __\/ \/_\/ \/ \/_\/ \/ \/_  \n"
         + "\/_____\/\\____\/\\__,_\/_\/ \/_\/\\__, \/\\___\/_____\/\\____\/\\__\/  \n"
         + "                        \/____\/        \n"
-        + "Enabling your laziness since 2019");
+        + "Enabling your laziness since 2019");*/
 
+    console.log("===\nwat\n===");
     client.user.setActivity('you all laze about', {type: 'WATCHING'});
 });
 
-client.on('message', message => {
+client.on('message', async message => {
     // ignore messages from other bots
     if (message.author.bot) return;
 
     // check guild id and assign prefix appropriately
     // if guild id is not found in database, use default prefix
-    let prefix = command_prefix;
+    /*let prefix = command_prefix;
     try{
-        prefix = bot.getPrefix(command_prefix, message.guild.id);
+        prefix = await bot.getPrefix(message.guild.id);
     }
-    catch(err){}
+    catch(err){}*/
+    const prefix = await bot.getPrefix(message.guild.id);
 
     // Conveniently, trailing whitespaces are eaten/ignored
     if (message.content === `<@${client.user.id}>` || message.content === `<@!${client.user.id}>`){
@@ -72,6 +74,7 @@ client.on('message', message => {
 
     let args = [];
 
+    // TODO: DRY this
     if (message.content.startsWith(prefix)){
         args = message.content.slice(prefix.length).split(/ +/);
     }
