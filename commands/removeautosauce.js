@@ -9,7 +9,7 @@ module.exports = {
     spammy: false,
     permissions: ['MANAGE_CHANNELS'],
 
-    execute(message, args, bot){
+    async execute(message, args, bot){
         //message.channel.send(bot.removeAutoSauce(message.channel.id, message.guild.id));
         const channels = [];
         const regex = /(<#)?(\d+)(>)?/;
@@ -23,10 +23,10 @@ module.exports = {
             }
         }
         if (channels.length){
-            message.channel.send(bot.removeAutoSauce(channels, message.guild.id));
+            message.channel.send(await bot.removeAutoSauce(channels, message.guild.id));
         }
         else if (!args.length){
-            message.channel.send(bot.removeAutoSauce([message.channel], message.guild.id));
+            message.channel.send(await bot.removeAutoSauce([message.channel], message.guild.id));
         }
         else{
             message.channel.send(`Channel not found.`);

@@ -12,8 +12,8 @@ module.exports = {
     spammy: false,
     permissions: [],
 
-    execute(message, args, bot){
-        let botspam = bot.getBotSpam(message.guild.id);
+    async execute(message, args, bot){
+        const botspam = await bot.getBotSpam(message.guild.id);
         if(!botspam || !botspam.length){ return message.channel.send("No channels are marked as bot-spam."); }
         lister.list_channels(message, botspam, "Bot-spam Channels");
     },

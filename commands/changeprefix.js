@@ -1,5 +1,5 @@
 "use strict";
-const { command_prefix } = require('../config/config.json');
+//const { command_prefix } = require('../config/config.json');
 
 module.exports = {
     name: 'changeprefix',

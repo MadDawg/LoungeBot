@@ -41,15 +41,14 @@ process.on('unhandledRejection', badbye);
 
 client.on('ready', () => {
     // we'll forgive the usage of console.log here
-    /*console.log("    __                                 ____        __ \n"
+    console.log("    __                                 ____        __ \n"
         + "   \/ \/   ____  __  ______  ____ ____  \/ __ )____  \/ \/_\n"
         + "  \/ \/   \/ __ \\\/ \/ \/ \/ __ \\\/ __ `\/ _ \\\/ __  \/ __ \\\/ __\/\n"
         + " \/ \/___\/ \/_\/ \/ \/_\/ \/ \/ \/ \/ \/_\/ \/  __\/ \/_\/ \/ \/_\/ \/ \/_  \n"
         + "\/_____\/\\____\/\\__,_\/_\/ \/_\/\\__, \/\\___\/_____\/\\____\/\\__\/  \n"
         + "                        \/____\/        \n"
-        + "Enabling your laziness since 2019");*/
+        + "Enabling your laziness since 2019");
 
-    console.log("===\nwat\n===");
     client.user.setActivity('you all laze about', {type: 'WATCHING'});
 });
 
@@ -59,12 +58,12 @@ client.on('message', async message => {
 
     // check guild id and assign prefix appropriately
     // if guild id is not found in database, use default prefix
-    /*let prefix = command_prefix;
+    let prefix = command_prefix;
     try{
         prefix = await bot.getPrefix(message.guild.id);
     }
-    catch(err){}*/
-    const prefix = await bot.getPrefix(message.guild.id);
+    catch(err){}
+    //const prefix = await bot.getPrefix(message.guild.id);
 
     // Conveniently, trailing whitespaces are eaten/ignored
     if (message.content === `<@${client.user.id}>` || message.content === `<@!${client.user.id}>`){
