@@ -10,7 +10,6 @@ module.exports = {
     permissions: ['MANAGE_CHANNELS'],
 
     async execute(message, args, bot){
-        //message.channel.send(bot.removeAutoSauce(message.channel.id, message.guild.id));
         const channels = [];
         const regex = /(<#)?(\d+)(>)?/;
         if (args && args.length){

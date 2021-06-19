@@ -1,6 +1,5 @@
 "use strict";
 
-
 const fs = require('fs');
 //const {token, command_prefix} = require('./config/config.json');
 const Discord = require('discord.js');
@@ -86,7 +85,7 @@ client.on('message', async message => {
         args = message.content.slice((`<@!${client.user.id}>`).length).split(/ +/);
     }
     else{
-        if (bot.isAutoSauce(message.channel.id, message.guild.id)){
+        if (await bot.isAutoSauce(message.channel.id, message.guild.id)){
             bot.getSauce(message, {
                 args: [],
                 manually_invoked: false,
