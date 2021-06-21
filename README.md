@@ -10,7 +10,7 @@ If hosting on Heroku or similar, you can omit the .env file and use their dashbo
 BOT_TOKEN=your bot token
 BOT_COMMAND_PREFIX=your desired command prefix (e.g. lb!)
 SAUCENAO_API_KEY=your saucenao API key
-DB_HOST=database URI
+DB_HOST=database host
 DB_NAME=database name
 DB_USER=database username
 DB_PASS=database user password
