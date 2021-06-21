@@ -1,6 +1,7 @@
 "use strict";
 const Discord = require('discord.js');
-const { command_prefix } = require('../config/config.json');
+const envs = require('../config.js');
+const command_prefix = envs.BOT_PREFIX;
 
 module.exports = {
     name: 'help',
