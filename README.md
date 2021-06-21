@@ -4,23 +4,16 @@
 - [PostgreSQL](https://www.postgresql.org/)
 
 ### Installation
-Clone the repository and run `npm install` in the project directory. After doing so, you will need to create a config.json file with the following fields:
+Clone the repository and run `npm install` in the project directory. After doing so, you will need to create a .env file to configure the environment variables with the fields shown below.
+If hosting on Heroku or similar, you can omit the .env file and use their dashboard to configure the environment variables instead.
 ```
-{
-    "token":"YOUR_DISCORD_BOT_TOKEN_HERE",
-    "command_prefix":"lb!",
-    "saucenao_api_key":"YOUR_SAUCENAO_API_KEY_HERE"
-}
-```
-
-You will also need to create a db_config.json with the following:
-```
-{
-    "host": "NETWORK_LOCATION_OF_YOUR_POSTGRES_DATABASE",
-    "database": "NAME_OF_DATABASE",
-    "username": "USERNAME",
-    "password": "PASSWORD"
-}
+BOT_TOKEN=your bot token
+BOT_COMMAND_PREFIX=your desired command prefix (e.g. lb!)
+SAUCENAO_API_KEY=your saucenao API key
+DB_HOST=database URI
+DB_NAME=database name
+DB_USER=database username
+DB_PASS=database user password
 ```
 ### Launching the Bot
 After installing and configuring the bot, simply type `node index.js`

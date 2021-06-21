@@ -1,7 +1,6 @@
 "use strict";
 
 const fs = require('fs');
-//const {token, command_prefix} = require('./config/config.json');
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const LoungeBot = require('./lib/loungebot.js');
@@ -57,12 +56,7 @@ client.on('message', async message => {
 
     // check guild id and assign prefix appropriately
     // if guild id is not found in database, use default prefix
-    let prefix = command_prefix;
-    try{
-        prefix = await bot.getPrefix(message.guild.id);
-    }
-    catch(err){}
-    //const prefix = await bot.getPrefix(message.guild.id);
+    const prefix = await bot.getPrefix(message.guild.id) || command_prefix;
 
     // Conveniently, trailing whitespaces are eaten/ignored
     if (message.content === `<@${client.user.id}>` || message.content === `<@!${client.user.id}>`){
