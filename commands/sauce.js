@@ -10,11 +10,11 @@ module.exports = {
     spammy: true,
     permissions: [],
 
-    execute(message, args, bot){
+    async execute(message, args, bot){
         if (!args.length && !message.attachments.first()){
             let reply = `no arguments provided!`
-            + `\nUsage: \`${bot.getPrefix(message.guild.id)}${this.name} ${this.usage}\``
-            + ` or \`${bot.getPrefix(message.guild.id)}${this.name} <image attachment>\``;
+            + `\nUsage: \`${await bot.getPrefix(message.guild.id)}${this.name} ${this.usage}\``
+            + ` or \`${await bot.getPrefix(message.guild.id)}${this.name} <image attachment>\``;
             return message.reply(reply);
         }
 
