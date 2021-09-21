@@ -1,7 +1,7 @@
 "use strict";
 const Discord = require('discord.js');
 const envs = require('../config.js');
-const command_prefix = envs.BOT_PREFIX;
+const command_prefix = envs.BOT_COMMAND_PREFIX;
 
 module.exports = {
     name: 'help',
@@ -24,21 +24,21 @@ module.exports = {
                 `\nVisit the [commands page](https://github.com/MadDawg/LoungeBot/blob/master/COMMANDS.md) for additional information.`
             );
 
-            return message.author.send(embed)
+            return message.author.send({ embeds: [embed] })
                 .then(() => {
-                    if (message.channel.type === 'dm') return;
-                    message.reply('I\'ve sent you a DM with all commands!');
+                    if (message.channel.type === 'DM') return;
+                    message.reply({ content: 'I\'ve sent you a DM with all commands!' });
                 })
                 .catch(error => {
                     bot.logger.error(`Could not send help DM to ${message.author.tag}.\n`, error);
-                    message.reply('failed to send DM. Do you have DMs disabled?');
+                    message.reply({ content: 'failed to send DM. Do you have DMs disabled?' });
                 });
         }
         const name = args[0].toLowerCase();
         const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
 
         if (!command) {
-            return message.reply('that\'s not a valid command!');
+            return message.reply({ content: 'that\'s not a valid command!' });
         }
 
         data.push({name:`Command`, value:`${command.name}`});
@@ -54,6 +54,6 @@ module.exports = {
 
         embed.addFields(data);
 
-        message.channel.send(embed);
+        message.channel.send({ embeds: [embed] });
     },
 };

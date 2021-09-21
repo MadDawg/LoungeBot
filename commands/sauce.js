@@ -15,7 +15,7 @@ module.exports = {
             let reply = `no arguments provided!`
             + `\nUsage: \`${await bot.getPrefix(message.guild.id)}${this.name} ${this.usage}\``
             + ` or \`${await bot.getPrefix(message.guild.id)}${this.name} <image attachment>\``;
-            return message.reply(reply);
+            return message.reply({ content: reply });
         }
 
         bot.getSauce(message, {

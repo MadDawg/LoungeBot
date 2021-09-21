@@ -14,7 +14,7 @@ module.exports = {
 
     async execute(message, args, bot){
         const autosauce = await bot.getAutoSauce(message.guild.id);
-        if(!autosauce || !autosauce.length){ return message.channel.send("No channels are marked for auto-sauce."); }
+        if (!autosauce || !autosauce.length) { return message.reply({ content: "No channels are marked for auto-sauce." }); }
         lister.list_channels(message, autosauce, "Auto-sauce Channels");
     },
 };

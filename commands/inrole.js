@@ -15,8 +15,9 @@ module.exports = {
     args: true,
     usage: '<role1> [roleN...]',
     spammy: false,
+    disabled: true,
     permissions: [],
-
+    
     intersect(members1, members2){
         if (!members1.length || !members2.length) return [];
         /*if (!members1.length && !members2.length) return [];
@@ -112,7 +113,7 @@ module.exports = {
             embed = pages[0];
             if (page > 0 && page <= total_pages){ embed = pages[page-1]; }
 
-            message.channel.send(embed).then(async function (botmessage) {
+            message.reply({ embeds: [embed] }).then(async function (botmessage) {
                 if (total_pages < 2) return;
                 let keepgoing = true;
                 while (keepgoing){
@@ -154,7 +155,7 @@ module.exports = {
             }).catch(function(error){ bot.logger.error(`${error.name}: ${error.message}`); });
         }
         else{
-            message.channel.send(`No users found.`);
+            message.reply({ content: `No users found.` });
         }
     },
 };

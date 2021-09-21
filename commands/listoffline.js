@@ -7,11 +7,12 @@ module.exports = {
     args: false,
     //usage:,
     spammy: false,
+    disabled: true,
     permissions: [],
 
-    async execute(message, args, bot){
+    async execute(message, args, bot) {
         const members = await message.guild.members.fetch()
         const offline_members = members.filter(member => member.presence.status === "offline").array();
-        message.channel.send(`The server has ${offline_members.length} offline users (${message.guild.memberCount} total users).`);
+        message.reply({content: `The server has ${offline_members.length} offline users (${message.guild.memberCount} total users).`});
     },
   }
