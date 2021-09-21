@@ -1,4 +1,7 @@
 "use strict";
+
+const { Permissions } = require('discord.js');
+
 module.exports = {
     name: 'setbotspam',
     aliases: ['setbs', 'addbotspam', 'addbs'],
