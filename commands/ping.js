@@ -1,4 +1,5 @@
 "use strict";
+// TODO: consider: https://discordjs.guide/popular-topics/faq.html#how-do-i-check-the-bot-s-ping
 
 const Discord = require('discord.js');
 
@@ -16,6 +17,6 @@ module.exports = {
         const embed = new Discord.MessageEmbed();
         const pingTime = String(new Date().getTime() - message.createdTimestamp);
         embed.description = `${pingTime} ms`;
-        message.channel.send(embed);
+        message.reply({ embeds: [embed] });
     },
 };

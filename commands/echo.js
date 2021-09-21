@@ -17,6 +17,6 @@ module.exports = {
     execute(message, args, bot){
         const embed = new Discord.MessageEmbed();
         embed.description = args.join(" ");
-        message.channel.send(embed);
+        message.reply({ embeds: [embed] });
     },
 };

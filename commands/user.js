@@ -67,8 +67,10 @@ module.exports = {
             embed.addField("Account Creation Date", new Date(member.user.createdTimestamp).toLocaleString('en-GB', format));
             embed.addField("Join Date", new Date(member.joinedTimestamp).toLocaleString('en-GB', format));
 
-            message.channel.send(embed);
+            message.channel.send({ embeds: [embed] });
         }
-        else{ message.reply(`user not found or input was invalid.`); }
+        else {
+            message.reply({ content: `user not found or input was invalid.` });
+        }
     },
   }

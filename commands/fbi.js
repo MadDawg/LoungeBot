@@ -52,6 +52,6 @@ module.exports = {
         embed.setImage(links[this.random_int(links_max)]);
         embed.setColor("#FF0000");
 
-        message.channel.send(embed);
+        message.channel.send({ embeds: [embed] });
     },
   }

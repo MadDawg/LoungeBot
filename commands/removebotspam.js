@@ -7,7 +7,7 @@ module.exports = {
     args: false,
     usage: '[channel...]',
     spammy: false,
-    permissions: ['MANAGE_CHANNELS'],
+    permissions: [Permissions.FLAGS.MANAGE_CHANNELS],
 
     async execute(message, args, bot){
         const channels = [];
@@ -22,13 +22,13 @@ module.exports = {
             }
         }
         if (channels.length){
-            message.channel.send(await bot.removeBotSpam(channels, message.guild.id));
+            message.reply({ content: await bot.removeBotSpam(channels, message.guild.id) });
         }
         else if (!args.length){
-            message.channel.send(await bot.removeBotSpam([message.channel], message.guild.id));
+            message.reply({ content: await bot.removeBotSpam([message.channel], message.guild.id) });
         }
         else{
-            message.channel.send(`Channel not found.`);
+            message.reply({ content: `Channel not found.` });
         }
     },
 };

@@ -14,7 +14,7 @@ module.exports = {
 
     async execute(message, args, bot){
         const botspam = await bot.getBotSpam(message.guild.id);
-        if(!botspam || !botspam.length){ return message.channel.send("No channels are marked as bot-spam."); }
+        if (!botspam || !botspam.length) { return message.reply({ content: "No channels are marked as bot-spam." }); }
         lister.list_channels(message, botspam, "Bot-spam Channels");
     },
 };

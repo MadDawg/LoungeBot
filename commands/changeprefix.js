@@ -1,5 +1,5 @@
 "use strict";
-//const { command_prefix } = require('../config/config.json');
+const { MessageEmbed, Permissions } = require('discord.js');
 
 module.exports = {
     name: 'changeprefix',
@@ -9,18 +9,14 @@ module.exports = {
     args: true,
     usage: '<new prefix>',
     spammy: false,
-    permissions: ['ADMINISTRATOR'],
+    permissions: [Permissions.FLAGS.ADMINISTRATOR],
 
-    async execute(message, args, bot){
+    async execute(message, args, bot) {
         const prefix = await bot.getPrefix(message.guild.id);
-        if (args[0].length < 2){
-            return message.channel.send(`New prefix must be 2 or more characters long. Prefix (\`${prefix}\`) unchanged.`);
+        if (args[0].length < 2) {
+            return message.reply({ content: `New prefix must be 2 or more characters long. Prefix (\`${prefix}\`) unchanged.` });
         }
         const newprefix = await bot.changePrefix(args[0], message.guild.id);
-        message.channel.send('', {
-            embed: {
-                description: `Prefix \`${prefix}\` changed to \`${newprefix}\``
-            }
-        });
+        message.channel.send({ embeds: [new MessageEmbed().setDescription(`Prefix \`${prefix}\` changed to \`${newprefix}\``)]});
     },
 };
