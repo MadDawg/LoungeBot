@@ -12,7 +12,7 @@ module.exports = {
 
     async execute(message, args, bot){
         if (!args.length && !message.attachments.first()){
-            let reply = `no arguments provided!`
+            let reply = `No arguments provided!`
             + `\nUsage: \`${await bot.getPrefix(message.guild.id)}${this.name} ${this.usage}\``
             + ` or \`${await bot.getPrefix(message.guild.id)}${this.name} <image attachment>\``;
             return message.reply({ content: reply });

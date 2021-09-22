@@ -23,7 +23,9 @@ const { type } = require('os');
 const bot = new LoungeBot();
 const logger = bot.logger;
 const token = bot.token;
-const api_key = bot.api_key;
+// TODO: allow per-guild API keys to avoid globally running out of searches
+// and warn users that keys will be stored in database
+const api_key = bot.api_key; 
 const command_prefix = bot.command_prefix;
 
 const guild_text_channels = [
@@ -71,7 +73,7 @@ client.on('ready', () => {
         + "                        \/____\/        \n"
         + "Enabling your laziness since 2019");
 
-    client.user.setActivity('you all struggle', {type: 'WATCHING'});
+    client.user.setActivity('you all lose the sauce', {type: 'WATCHING'});
 });
 
 client.on('messageCreate', async message => {
