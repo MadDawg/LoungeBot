@@ -160,7 +160,8 @@ client.on('messageCreate', async message => {
     if (command.spammy){
         // allow spammy stuff in DM channel
         // TODO: add admin bypass
-        if (guild_text_channels.includes(message.channel.type) && !bot.isBotSpam(message.channel.id, message.guild.id)){
+        const botspam = await bot.isBotSpam(message.channel.id, message.guild.id);
+        if (guild_text_channels.includes(message.channel.type) && !botspam){
             return message.reply({ content: `this command can only be executed in channels marked by the bot as bot-spam` });
         }
     }
