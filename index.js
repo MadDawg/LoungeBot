@@ -162,7 +162,7 @@ client.on('messageCreate', async message => {
         // TODO: add admin bypass
         const botspam = await bot.isBotSpam(message.channel.id, message.guild.id);
         if (guild_text_channels.includes(message.channel.type) && !botspam){
-            return message.reply({ content: `this command can only be executed in channels marked by the bot as bot-spam` });
+            return message.reply({ content: `This command can only be executed in channels marked by the bot as bot-spam.` });
         }
     }
 
