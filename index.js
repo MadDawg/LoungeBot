@@ -18,13 +18,14 @@ const client = new Client({
 });
 
 const LoungeBot = require('./lib/loungebot.js');
-const { type } = require('os');
+//const { type } = require('os');
 
 const bot = new LoungeBot();
 const logger = bot.logger;
 const token = bot.token;
 // TODO: allow per-guild API keys to avoid globally running out of searches
 // and warn users that keys will be stored in database
+// this assumes that SauceNAO doesn't block the bot's IP address
 const api_key = bot.api_key; 
 const command_prefix = bot.command_prefix;
 
@@ -45,7 +46,6 @@ for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
     client.commands.set(command.name, command);
 }
-
 
 
 function goodbye(){
@@ -134,6 +134,7 @@ client.on('messageCreate', async message => {
 
     if (command.disabled) return;
 
+    // TODO: use hasAll function
     if (command.permissions && command.permissions.length){
         for (let i = 0; i < command.permissions.length; i++){
             const permission = command.permissions[i];
