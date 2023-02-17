@@ -11,14 +11,15 @@
   "author": "MadDawg",
   "license": "ISC",
   "engines": {
-    "node": ">=16.6.0"
+    "node": ">=16.9.0"
   },
+  "type":"module",
   "dependencies": {
-    "discord.js": "^13.1.0",
-    "dotenv": "^10.0.0",
-    "file-type": "^16.5.3",
+    "discord.js": "^14.7.0",
+    "dotenv": "^16.0.0",
+    "file-type": "^18.2.0",
     "follow-redirects": "^1.14.7",
-    "got": "^11.8.2",
+    "got": "^12.5.0",
     "lodash": "^4.17.21",
     "pg": "^8.6.0",
     "pg-hstore": "^2.3.3",
@@ -31,8 +32,8 @@
     "url": "https://github.com/MadDawg/LoungeBot"
   },
   "devDependencies": {
-    "eslint": "^7.25.0",
+    "eslint": "^8.34.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-security": "^1.4.0"
+    "eslint-plugin-security": "^1.7.0"
   }
 }

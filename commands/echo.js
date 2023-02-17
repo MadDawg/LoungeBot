@@ -1,22 +1,19 @@
 "use strict";
 
-const Discord = require('discord.js');
+import { MessageEmbed } from 'discord.js';
 
 //TODO: implement soft character limit
 
-module.exports = {
-    name: 'echo',
-    aliases: ['print'],
-    description: 'Repeat entered text',
-    guildOnly: false,
-    args: true,
-    usage: '<text>',
-    spammy: false,
-    permissions: [],
-
-    execute(message, args, bot){
-        const embed = new Discord.MessageEmbed();
-        embed.description = args.join(" ");
-        message.reply({ embeds: [embed] });
-    },
-};
+export const name = 'echo';
+export const aliases = ['print'];
+export const description = 'Repeat entered text';
+export const guildOnly = false;
+export const args = true;
+export const usage = '<text>';
+export const spammy = false;
+export const permissions = [];
+export function execute(message, args, bot) {
+    const embed = new MessageEmbed();
+    embed.description = args.join(" ");
+    message.reply({ embeds: [embed] });
+}

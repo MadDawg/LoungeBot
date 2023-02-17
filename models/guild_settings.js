@@ -12,7 +12,7 @@
 
 // expected string format: [{"guildid":"", "prefix":"", "botspam":[], "autosauce":[], "watchghostpings":""}]
 
-module.exports = (sequelize, DataTypes) => {
+export default (sequelize, DataTypes) => {
 	return sequelize.define('guilds', {
 		guildid: {
 			type: DataTypes.STRING,

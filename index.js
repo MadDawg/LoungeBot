@@ -1,6 +1,7 @@
 "use strict";
 
 const fs = require('fs');
+const got = require('got');
 //const Discord = require('discord.js');
 const { Collection, Client, Intents, MessageEmbed } = require('discord.js');
 
@@ -17,8 +18,10 @@ const client = new Client({
     ]
 });
 
-const LoungeBot = require('./lib/loungebot.js');
+const LoungeBot = require('./lib/loungebot.js').default;
 //const { type } = require('os');
+
+const status_push_url = require('./config.js').default.STATUS_PUSH_URL;
 
 const bot = new LoungeBot();
 const logger = bot.logger;
@@ -47,6 +50,14 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 
+// send a GET request to an API (e.g. Uptime Kuma)
+function touchStatusAPI(){
+    got(status_push_url).then(() => {
+        console.log('Message sent successfully');
+    }).catch(error => {
+        console.error('Failed to send message:', error.message);
+    });
+}
 
 function goodbye(){
     logger.info("Logging off!");
@@ -177,3 +188,4 @@ client.on('messageCreate', async message => {
 });
 
 client.login(token);
+setInterval(touchStatusAPI, 60000);
