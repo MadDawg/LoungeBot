@@ -1,6 +1,6 @@
 "use strict";
 
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 
 export const name = `user`;
 export const aliases = ['userinfo', 'memberinfo'];
@@ -10,7 +10,7 @@ export const args = false;
 export const usage = '[user]';
 export const spammy = false;
 export const permissions = [];
-export async function execute(message, args, bot) {
+export async function execute(message, args, dm) {
     args = Array.from(new Set(args));
 
     const format = {
@@ -26,7 +26,7 @@ export async function execute(message, args, bot) {
         timeZoneName: "short"
     };
 
-    const embed = new MessageEmbed();
+    const embed = new EmbedBuilder();
     let member = undefined;
     const tag_regex = /^\w+\#\d{4}$/;
     const id_regex = /^\d+$/;
@@ -61,13 +61,13 @@ export async function execute(message, args, bot) {
     if (member) {
         embed.setTitle(`User Info for ${member.user.tag}`);
         embed.setThumbnail(member.user.displayAvatarURL({ dynamic: true }));
-        embed.addField("ID", member.id);
-        embed.addField("Tag", member.user.tag);
+        embed.addFields({name: "ID", value: member.id});
+        embed.addFields({name: "Tag", value: member.user.tag});
         if (member.nickname) {
-            embed.addField("Nickname", member.nickname);
+            embed.addFields({name: "Nickname", value: member.nickname});
         }
-        embed.addField("Account Creation Date", new Date(member.user.createdTimestamp).toLocaleString('en-GB', format));
-        embed.addField("Join Date", new Date(member.joinedTimestamp).toLocaleString('en-GB', format));
+        embed.addFields({name: "Account Creation Date", value: new Date(member.user.createdTimestamp).toLocaleString('en-GB', format)});
+        embed.addFields({name: "Join Date", value: new Date(member.joinedTimestamp).toLocaleString('en-GB', format)});
 
         message.channel.send({ embeds: [embed] });
     }
@@ -75,3 +75,5 @@ export async function execute(message, args, bot) {
         message.reply({ content: `user not found or input was invalid.` });
     }
 }
+
+export default { name, aliases, description, guildOnly, args, usage, spammy, permissions, execute };

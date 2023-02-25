@@ -1,72 +1,73 @@
 "use strict";
 
-const fs = require('fs');
-const got = require('got');
-//const Discord = require('discord.js');
-const { Collection, Client, Intents, MessageEmbed } = require('discord.js');
+import { readdirSync, stat } from 'fs';
+import got from 'got';
+import Discord from 'discord.js';
+const { Collection, Client, GatewayIntentBits, EmbedBuilder, ActivityType, ChannelType } = Discord;
 
 const client = new Client({
     intents: [
-        Intents.FLAGS.GUILD_MEMBERS,
-        Intents.FLAGS.GUILD_PRESENCES,
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_BANS,
-        Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-        Intents.FLAGS.DIRECT_MESSAGES,
-        Intents.FLAGS.DIRECT_MESSAGE_REACTIONS
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildPresences,
+        GatewayIntentBits.Guilds,
+        //GatewayIntentBits.GuildBans,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.DirectMessageReactions
     ]
 });
 
-const LoungeBot = require('./lib/loungebot.js').default;
+import DataManager from './lib/datamanager.js';
 //const { type } = require('os');
+import envs from './config.js';
+const status_push_url = envs.STATUS_PUSH_URL;
+import getSauce from './lib/saucefunctions.js';
 
-const status_push_url = require('./config.js').default.STATUS_PUSH_URL;
-
-const bot = new LoungeBot();
-const logger = bot.logger;
-const token = bot.token;
+const dm = new DataManager();
+const logger = dm.logger;
+const token = dm.token;
 // TODO: allow per-guild API keys to avoid globally running out of searches
 // and warn users that keys will be stored in database
 // this assumes that SauceNAO doesn't block the bot's IP address
-const api_key = bot.api_key; 
-const command_prefix = bot.command_prefix;
+//const api_key = dm.api_key; 
+const command_prefix = dm.command_prefix;
 
 const guild_text_channels = [
-    "GUILD_TEXT",
-    //"GUILD_NEWS",
-    //"GUILD_NEWS_THREAD",
-    "GUILD_PUBLIC_THREAD",
-    "GUILD_PRIVATE_THREAD",
+    "TextChannel",
+    "NewsChannel",
+    "ThreadChannel",
+    "VoiceChannel"
 ];
 
 //client.commands = new Discord.Collection();
 client.commands = new Collection();
 
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const commandFiles = readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
+    const { default: command } = await import(`./commands/${file}`);
     client.commands.set(command.name, command);
 }
 
 // send a GET request to an API (e.g. Uptime Kuma)
 function touchStatusAPI(){
     got(status_push_url).then(() => {
-        console.log('Message sent successfully');
+        //console.log('Message sent successfully');
     }).catch(error => {
         console.error('Failed to send message:', error.message);
     });
 }
 
-function goodbye(){
+function goodbye(exitCode = 0){
     logger.info("Logging off!");
     client.destroy();
+    process.exit(exitCode);
 }
 
 function badbye(error){
     logger.crit(error);
-    goodbye();
+    goodbye(1);
 }
 
 process.on('SIGINT', goodbye);
@@ -84,24 +85,24 @@ client.on('ready', () => {
         + "                        \/____\/        \n"
         + "Enabling your laziness since 2019");
 
-    client.user.setActivity('you all lose the sauce', {type: 'WATCHING'});
+    client.user.setActivity('you all lose the sauce', {type: ActivityType.Watching});
 });
 
 client.on('messageCreate', async message => {
     // ignore messages from other bots
-    if (message.author.bot) return;
+    if (message.author.dm) return;
 
     // check guild id and assign prefix appropriately
     // if guild id is not found in database, or if we are in a DM channel, use default prefix
     let prefix = command_prefix;
     if (guild_text_channels.includes(message.channel.type)) {
-        prefix = await bot.getPrefix(message.guild.id) || command_prefix;
+        prefix = await dm.getPrefix(message.guildId) || command_prefix;
     }
     
 
     // Conveniently, trailing whitespaces are eaten/ignored
     if (message.content === `<@${client.user.id}>` || message.content === `<@!${client.user.id}>`){
-        message.reply({embeds: [new MessageEmbed().setDescription(`My command prefix is \`${prefix}\``)] });
+        message.reply({embeds: [new EmbedBuilder().setDescription(`My command prefix is \`${prefix}\``)] });
         return;
     }
 
@@ -120,8 +121,8 @@ client.on('messageCreate', async message => {
         args = message.content.slice((`<@!${client.user.id}>`).length).split(/ +/);
     }
     else{
-        if (await bot.isAutoSauce(message.channel.id, message.guild.id)){
-            bot.getSauce(message, {
+        if (await dm.isAutoSauce(message.channelId, message.guildId)){
+            getSauce(message, {
                 args: [],
                 manually_invoked: false,
                 numres: "8",
@@ -131,7 +132,7 @@ client.on('messageCreate', async message => {
         return;
     }
 
-    if (args[0] === '') args.splice(0,1);
+    if (args[0] === '') { args.splice(0,1); }
 
     // avoid breaking when prefix is entered with no command
     if (!args.length){ return; }
@@ -145,7 +146,12 @@ client.on('messageCreate', async message => {
 
     if (command.disabled) return;
 
-    // TODO: use hasAll function
+    if (command.guildOnly && message.channel.type === ChannelType.DM) {
+        return message.reply({ content: 'I can\'t execute that command inside DMs!' });
+    }
+
+    // TODO: use hasAll function?
+    // This breaks in DM channels, but it hopefully isn't an issue here 
     if (command.permissions && command.permissions.length){
         for (let i = 0; i < command.permissions.length; i++){
             const permission = command.permissions[i];
@@ -153,10 +159,6 @@ client.on('messageCreate', async message => {
                 return message.reply({ content: `you need the following permissions: ${command.permissions.join(', ')}` });
             }
         }
-    }
-
-    if (command.guildOnly && !guild_text_channels.includes(message.channel.type)) {
-        return message.reply({ content: 'I can\'t execute that command inside DMs!' });
     }
 
     if (command.args && !args.length){
@@ -172,14 +174,14 @@ client.on('messageCreate', async message => {
     if (command.spammy){
         // allow spammy stuff in DM channel
         // TODO: add admin bypass
-        const botspam = await bot.isBotSpam(message.channel.id, message.guild.id);
-        if (guild_text_channels.includes(message.channel.type) && !botspam){
+        const botspam = await dm.isBotSpam(message.channelId, message.guildId);
+        if (!message.channel.type === ChannelType.DM && !botspam){
             return message.reply({ content: `This command can only be executed in channels marked by the bot as bot-spam.` });
         }
     }
 
     try {
-        command.execute(message, args, bot);
+        command.execute(message, args, dm);
     }
     catch (error) {
         logger.error(error);
@@ -189,3 +191,4 @@ client.on('messageCreate', async message => {
 
 client.login(token);
 setInterval(touchStatusAPI, 60000);
+//console.log(status_push_url);

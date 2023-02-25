@@ -9,7 +9,7 @@ export const args = false;
 export const usage = '[timezone]';
 export const spammy = false;
 export const permissions = [];
-export function execute(message, args, bot) {
+export function execute(message, args, dm) {
     const format = {
         timeZone: "UTC",
         hourCycle: "h24",
@@ -37,3 +37,5 @@ export function execute(message, args, bot) {
         }
     }
 }
+
+export default { name, aliases, description, guildOnly, args, usage, spammy, permissions, execute };

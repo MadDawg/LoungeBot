@@ -1,7 +1,7 @@
 "use strict";
 
 import { readFileSync } from 'fs';
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 
 // TODO: check users
 // TODO: check for role input
@@ -17,7 +17,7 @@ export const permissions = [];
 export function random_int(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
-export function execute(message, args, bot) {
+export function execute(message, args, dm) {
     let msg = "";
     args = Array.from(new Set(args)); // remove dupes
 
@@ -39,15 +39,17 @@ export function execute(message, args, bot) {
     const quotes = raw.quotes;
     const links_max = links.length;
     const quotes_max = quotes.length;
-    const embed = new MessageEmbed();
+    const embed = new EmbedBuilder();
     if (msg != "") {
         embed.setDescription(msg);
     }
     else {
-        embed.setDescription(quotes[this.random_int(quotes_max)]);
+        embed.setDescription(quotes[random_int(quotes_max)]);
     }
-    embed.setImage(links[this.random_int(links_max)]);
+    embed.setImage(links[random_int(links_max)]);
     embed.setColor("#FF0000");
 
     message.channel.send({ embeds: [embed] });
 }
+
+export default { name, aliases, description, guildOnly, args, usage, spammy, permissions, execute };

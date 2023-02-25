@@ -1,6 +1,6 @@
 "use strict";
 
-import { Permissions } from 'discord.js';
+import { PermissionsBitField } from 'discord.js';
 
 export const name = 'setbotspam';
 export const aliases = ['setbs', 'addbotspam', 'addbs'];
@@ -9,8 +9,8 @@ export const guildOnly = true;
 export const args = false;
 export const usage = '[channel...]';
 export const spammy = false;
-export const permissions = [Permissions.FLAGS.MANAGE_CHANNELS];
-export async function execute(message, args, bot) {
+export const permissions = [PermissionsBitField.Flags.ManageChannels];
+export async function execute(message, args, dm) {
     const channels = [];
     const regex = /(<#)?(\d+)(>)?/;
     if (args && args.length) {
@@ -23,12 +23,14 @@ export async function execute(message, args, bot) {
         }
     }
     if (channels.length) {
-        message.reply({ content: await bot.addBotSpam(channels, message.guild.id) });
+        message.reply({ content: await dm.addBotSpam(channels, message.guild.id) });
     }
     else if (!args.length) {
-        message.reply({ content: await bot.addBotSpam([message.channel], message.guild.id) });
+        message.reply({ content: await dm.addBotSpam([message.channel], message.guild.id) });
     }
     else {
         message.reply({ content: `Channel not found.` });
     }
 }
+
+export default { name, aliases, description, guildOnly, args, usage, spammy, permissions, execute };

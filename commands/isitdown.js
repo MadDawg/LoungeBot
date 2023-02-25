@@ -4,9 +4,11 @@
 
 //const request = require('request');
 //const https = require('https');
-import { https } from 'follow-redirects';
-import http_status_codes from '../resources/http_status_codes.json';
-import { MessageEmbed } from 'discord.js';
+import https from 'follow-redirects';
+const _https = https.https;
+
+import http_status_codes from '../resources/http_status_codes.js';
+import { EmbedBuilder } from 'discord.js';
 
 export const name = 'isitdown';
 export const aliases = [];
@@ -16,19 +18,19 @@ export const args = true;
 export const usage = '<url>';
 export const spammy = false;
 export const permissions = [];
-export function execute(message, args, bot) {
+export function execute(message, args, dm) {
     // maybe there's a more proper way to check for the TypeError?
     const status_msg = http_status_codes;
-    const embed = new MessageEmbed();
+    const embed = new EmbedBuilder();
     try {
         let url = args[0];
         url = url.toLowerCase();
 
-        if (url.startsWith("https://") === false || !url.startsWith("http://") === false) {
+        if (url.startsWith("https://") === false && url.startsWith("http://") === false) {
             url = "https://" + url;
         }
 
-        https.get(url, response => {
+        _https.get(url, response => {
             if ([200, 201, 202].includes(response.statusCode)) {
                 embed.setDescription(`${url} is ** UP **`);
                 return message.reply({ embeds: [embed] });
@@ -47,8 +49,8 @@ export function execute(message, args, bot) {
                 return message.reply({ embeds: [embed] });
             }
             embed.setDescription(`Something went wrong!`);
-            return message.reply({ embeds: [embed] });
-            bot.logger.error(error);
+            dm.logger.error(error);
+            return message.reply({ embeds: [embed] }); 
         });
     }
     catch (error) {
@@ -56,7 +58,13 @@ export function execute(message, args, bot) {
             embed.setDescription(error.message);
             return message.reply({ embeds: [embed] });
         }
-
+        // TODO: handle automatically instead of having the user deal with it
+        if (error.code === "ERR_ASSERTION" && error.message === "protocol mismatch"){
+            embed.setDescription("Protocol mismatch. Make sure you chose between `http://` or `https://` correctly")
+            return message.reply({ embeds: [embed] });
+        }
         throw (error);
     }
 }
+
+export default { name, aliases, description, guildOnly, args, usage, spammy, permissions, execute };

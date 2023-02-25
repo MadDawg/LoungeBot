@@ -1,6 +1,7 @@
 "use strict";
 
-import { list_channels } from '../lib/channel_marker.js';
+import lister from '../lib/channel_marker.js';
+const list_channels = lister.list_channels;
 
 export const name = 'listbotspam';
 export const aliases = ['lsbs', 'lsbotspam'];
@@ -10,8 +11,10 @@ export const args = false;
 export const usage = '';
 export const spammy = false;
 export const permissions = [];
-export async function execute(message, args, bot) {
-    const botspam = await bot.getBotSpam(message.guild.id);
+export async function execute(message, args, dm) {
+    const botspam = await dm.getBotSpam(message.guild.id);
     if (!botspam || !botspam.length) { return message.reply({ content: "No channels are marked as bot-spam." }); }
     list_channels(message, botspam, "Bot-spam Channels");
 }
+
+export default { name, aliases, description, guildOnly, args, usage, spammy, permissions, execute };

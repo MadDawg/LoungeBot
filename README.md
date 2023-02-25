@@ -1,6 +1,6 @@
 # LoungeBot
 ### Dependencies
-- [Node.js](https://nodejs.org/) v16.6.0+
+- [Node.js](https://nodejs.org/) v16.9.0+
 - [PostgreSQL](https://www.postgresql.org/)
 
 ### Installation

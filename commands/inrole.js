@@ -2,7 +2,7 @@
 
 // BROKEN!
 
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 
 //TODO: include offline members also
 //TODO: clean up variable names
@@ -29,14 +29,14 @@ export function find_role(message, id) {
     return message.guild.roles.fetch(id);
 }
 export function create_embed(roles, total_users, pageno, total_pages, users) {
-    const embed = new MessageEmbed();
+    const embed = new EmbedBuilder();
     embed.setTitle(`Users in role(s): ${total_users}`);
     embed.setColor(`#0000FF`);
     embed.setFooter(`${pageno}/${total_pages}`);
     embed.addField('Users', users);
     return embed;
 }
-export async function execute(message, args, bot) {
+export async function execute(message, args, dm) {
     let final_list = []; // list containing the users we were searching for
 
     //let reply = "";
@@ -64,13 +64,13 @@ export async function execute(message, args, bot) {
             // final_list is empty on first iteration,
             // so avoid intersecting it and just use member_tags
             if (i > 0) {
-                final_list = this.intersect(final_list, member_tags);
+                final_list = intersect(final_list, member_tags);
             }
             else { final_list = member_tags; }
         }
         catch (err) {
             if (err instanceof TypeError) {
-                bot.logger.error(`${this.name}: invalid role entered`);
+                dm.logger.error(`${name}: invalid role entered`);
             }
         }
     }
@@ -90,7 +90,7 @@ export async function execute(message, args, bot) {
             if (j >= 15) {
                 j = 0; // will be incremented when loop iterates
                 members_str += final_list[i] + '\n';
-                const embed = this.create_embed(roles_str, total_users, pageno, total_pages, members_str);
+                const embed = create_embed(roles_str, total_users, pageno, total_pages, members_str);
                 pages.push(embed);
                 members_str = "";
                 pageno++;
@@ -102,7 +102,7 @@ export async function execute(message, args, bot) {
         // push final page if there are any remaining users
         let embed = undefined;
         if (members_str != "") {
-            embed = this.create_embed(roles_str, total_users, pageno, total_pages, members_str);
+            embed = create_embed(roles_str, total_users, pageno, total_pages, members_str);
             pages.push(embed);
         }
 
@@ -132,7 +132,7 @@ export async function execute(message, args, bot) {
                     .then(async function (collected) {
                         const reaction = collected.first();
 
-                        await botmessage.reactions.removeAll().catch(function (error) { bot.logger.error(`${error.name}: ${error.message}`); });
+                        await botmessage.reactions.removeAll().catch(function (error) { dm.logger.error(`${error.name}: ${error.message}`); });
                         if (reaction.emoji.name === '➡️') {
                             // go to next page
                             if (page - 1 >= total_pages - 1)
@@ -144,16 +144,18 @@ export async function execute(message, args, bot) {
                                 return;
                             await page--;
                         }
-                        await botmessage.edit('', pages[page - 1]).catch(bot.logger.error);
+                        await botmessage.edit('', pages[page - 1]).catch(dm.logger.error);
                     })
                     .catch(collected => {
-                        botmessage.reactions.removeAll().catch(function (error) { bot.logger.error(`${error.name}: ${error.message}`); });
+                        botmessage.reactions.removeAll().catch(function (error) { dm.logger.error(`${error.name}: ${error.message}`); });
                         keepgoing = false;
                     });
             }
-        }).catch(function (error) { bot.logger.error(`${error.name}: ${error.message}`); });
+        }).catch(function (error) { dm.logger.error(`${error.name}: ${error.message}`); });
     }
     else {
         message.reply({ content: `No users found.` });
     }
 }
+
+export default { name, aliases, description, guildOnly, args, usage, spammy, permissions, execute };

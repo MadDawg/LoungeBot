@@ -1,7 +1,8 @@
 // https://stackoverflow.com/questions/42109813/node-js-environment-variables-and-heroku-deployment
 
 import { config } from 'dotenv';
-import { each } from 'lodash';
+import lodash from 'lodash';
+const { each } = lodash;
 
 const result = config();
 
