@@ -32,8 +32,8 @@ export function create_embed(roles, total_users, pageno, total_pages, users) {
     const embed = new EmbedBuilder();
     embed.setTitle(`Users in role(s): ${total_users}`);
     embed.setColor(`#0000FF`);
-    embed.setFooter(`${pageno}/${total_pages}`);
-    embed.addField('Users', users);
+    embed.setFooter({ text: `${pageno}/${total_pages}` });
+    embed.addFields({name: 'Users', value: users });
     return embed;
 }
 export async function execute(message, args, dm) {
@@ -46,24 +46,18 @@ export async function execute(message, args, dm) {
     let page = 1; // page selector
     const users_per_page = 15;
 
-    //args = Array.from(new Set(args)); // remove dupes
-    const roles_mentioned = message.mentions.roles.array();
+    const roles_mentioned = message.mentions.roles;
 
-    //for (let i=0; i<args.length; i++){
-    for (let i = 0; i < roles_mentioned.length; i++) {
-        try {
-            //const matches = args[i].match(/^<@&(\d+)>$/);
-            //const matches = args[i].match(Discord.MessageMentions.ROLES_PATTERN);
-            //const id = matches[1];
-            const role = roles_mentioned[i];
-            const members = role.members.array();
-            if (!members.length) { continue; } //ignore empty role
+    roles_mentioned.forEach((role) => {
+        try{
+            const members = role.members;
+            if (!members.size){ return; } // ignore empty role
             if (roles.length < 3) { roles.push(role.name); }
             const member_tags = members.map(member => member.user.tag);
 
             // final_list is empty on first iteration,
             // so avoid intersecting it and just use member_tags
-            if (i > 0) {
+            if (final_list.length) {
                 final_list = intersect(final_list, member_tags);
             }
             else { final_list = member_tags; }
@@ -73,7 +67,7 @@ export async function execute(message, args, dm) {
                 dm.logger.error(`${name}: invalid role entered`);
             }
         }
-    }
+    });
 
     roles_str = roles.join(', ');
     if (roles.length >= 3) { roles_str += ", ..."; }

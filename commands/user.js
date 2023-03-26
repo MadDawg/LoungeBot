@@ -4,7 +4,7 @@ import { EmbedBuilder } from 'discord.js';
 
 export const name = `user`;
 export const aliases = ['userinfo', 'memberinfo'];
-export const description = 'Display user info';
+export const description = 'Display user info (prioritizes mentions)';
 export const guildOnly = true;
 export const args = false;
 export const usage = '[user]';
@@ -36,8 +36,17 @@ export async function execute(message, args, dm) {
     }
 
     // if mention
-    else if (message.mentions && message.mentions.members.array().length) {
+    else if (message.mentions && !message.content.startsWith(message.mentions.members.first())) {
         member = message.mentions.members.first();
+    }
+
+    // called from mention
+    // mention collection removes duplicates (as it extends Map)
+    // if we have only one unique mention, then assume we intend to return the bot itself
+    // otherwise, grab the second mention (and ignore anything else; hence, prioritize mentions)
+    else if (message.mentions && message.content.startsWith(message.mentions.members.first())){
+        if (message.mentions.size > 1){ member = message.mentions.members.at(2); }
+        else member = message.mentions.members.first();
     }
 
     // if tag (works only if typed exactly as displayed (casing))
@@ -50,7 +59,7 @@ export async function execute(message, args, dm) {
 
     // if id
     else if (id_regex.test(args[0])) {
-        member = message.guild.member(args[0]);
+        member = await message.guild.members.fetch(args[0]);
     }
 
     // if username or anything else (BROKEN)
