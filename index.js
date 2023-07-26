@@ -14,7 +14,8 @@ const client = new Client({
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildMessageReactions,
         GatewayIntentBits.DirectMessages,
-        GatewayIntentBits.DirectMessageReactions
+        GatewayIntentBits.DirectMessageReactions,
+        GatewayIntentBits.MessageContent
     ]
 });
 
@@ -90,7 +91,7 @@ client.on('ready', () => {
 
 client.on('messageCreate', async message => {
     // ignore messages from other bots
-    if (message.author.dm) return;
+    if (message.author.bot) return;
 
     // check guild id and assign prefix appropriately
     // if guild id is not found in database, or if we are in a DM channel, use default prefix
@@ -191,4 +192,3 @@ client.on('messageCreate', async message => {
 
 client.login(token);
 setInterval(touchStatusAPI, 60000);
-//console.log(status_push_url);
