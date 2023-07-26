@@ -34,10 +34,10 @@ const token = dm.token;
 const command_prefix = dm.command_prefix;
 
 const guild_text_channels = [
-    "TextChannel",
-    "NewsChannel",
-    "ThreadChannel",
-    "VoiceChannel"
+    ChannelType.GuildText,
+    ChannelType.GuildAnnouncement,
+    ChannelType.AnnouncementThread,
+    ChannelType.PublicThread
 ];
 
 //client.commands = new Discord.Collection();
