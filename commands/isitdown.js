@@ -26,6 +26,7 @@ export function execute(message, args, dm) {
         let url = args[0];
         url = url.toLowerCase();
 
+        // not gonna bother with ftp, etc.
         if (url.startsWith("https://") === false && url.startsWith("http://") === false) {
             url = "https://" + url;
         }
