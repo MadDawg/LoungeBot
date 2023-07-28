@@ -191,4 +191,4 @@ client.on('messageCreate', async message => {
 });
 
 client.login(token);
-setInterval(touchStatusAPI, 60000);
+if (status_push_url) { setInterval(touchStatusAPI, 60000); }
