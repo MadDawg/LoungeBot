@@ -1,6 +1,7 @@
 "use strict";
 
 //TODO: lazily wait on https://downforeveryoneorjustme.com/services/api
+//TODO: use got instead of follow-redirects since we are already using it anyway
 
 //const request = require('request');
 //const https = require('https');
